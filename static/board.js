@@ -4,9 +4,8 @@ class Board{
 		this.WIDTH = 10;
 		this.HEIGHT = 20;
 		for(let i = 0; i < this.WIDTH; i++){
-      this.board.push([]);
 			for(let j = 0; j < this.HEIGHT; j++){
-				this.board[i].push({isEmpty: () => true});
+				this.board[i][j] = {isEmpty: () => true};
 			}
 		}
 		if(stringRep !== ''){
@@ -14,7 +13,9 @@ class Board{
 			stringRep.split('|').forEach(line => {
 				let i = 0;
 				line.split(',').forEach(spot => {
-					if(spot === 'r'){
+					if(spot === 'e'){
+						this.board[i][j] = {isEmpty: () => true};
+					} else if(spot === 'r'){
 						this.board[i][j] = {isEmpty: () => false, color: () => 'red'};
 					} else if(spot === 'g'){
 						this.board[i][j] = {isEmpty: () => false, color: () => 'green'};
@@ -29,7 +30,7 @@ class Board{
 		}
 	}
 	toString(){
-		let out = "";
+		out = "";
 		for(let i = 0; i < this.WIDTH; i++){
 			for(let j = 0; j < this.HEIGHT; j++){
 				if(this.board[i][j].isEmpty()){
@@ -48,13 +49,4 @@ class Board{
 	}
 }
 
-
-var socket = io();
-b = new Board('');
-socket.on('message', function(data) {
-  let h1 = document.createElement("H1");
-  h1.innerHTML = data;
-  document.body.appendChild(h1);
-  console.log(b.toString());
-});
-
+exports = Board;
