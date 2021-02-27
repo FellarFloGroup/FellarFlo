@@ -122,17 +122,17 @@ PIECES = {
 let playerPiece = {
 	piece: PIECES['T'][0],
 	x: 5,
-	y: 5
+	y: 5,
+	pieceStr: "T",
+	pieceIdx: 0
 };
 
 var socket = io();
 b = new Board();
-let counter = 0;
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	playerPiece.piece = PIECES['T'][counter%4];
-	counter += 1;
+	rotatePlayerPiece(playerPiece);
 });
 
 for(let i = 5; i < 10; i++){
@@ -231,6 +231,30 @@ function changePlayerPiece(playerPiece, pieceStr){
 	}
 }
 
+function rotatePlayerPiece(playerPiece, dir="right"){
+	playerPiece.pieceIdx += (dir === 'right' ? 1 : -1);
+	playerPiece.pieceIdx %= 4;
+	playerPiece.piece = PIECES[playerPiece.pieceStr][playerPiece.pieceIdx];
+	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+			if(!playerPiece.piece.piece[i][j].isEmpty()){
+				while(playerPiece.y-i-playerPiece.piece.centerY < 0){
+					playerPiece.y += 1;
+				}
+				while(playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
+					playerPiece.y -= 1;
+				}
+				while(playerPiece.x-j-playerPiece.piece.centerX < 0){
+					playerPiece.x += 1;
+				}
+				while(playerPiece.x-j-playerPiece.piece.centerX >= b.WIDTH){
+					playerPiece.x -= 1;
+				}
+			}
+		}
+	}
+}
+
 
 setInterval(() => {
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
@@ -262,7 +286,7 @@ document.onkeydown = function (e) {
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
-					while(playerPiece.x-(change)-j-playerPiece.piece.centerX < 0){
+					while(playerPiece.x-j-(change)-playerPiece.piece.centerX < 0){
 						change -= 1;
 					}
 				}
