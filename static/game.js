@@ -1,5 +1,6 @@
 class Board{
 	constructor(stringRep=''){
+		//board[yCoord][xCoord]
 		this.board = [];
 		this.WIDTH = 10;
 		this.HEIGHT = 20;
@@ -93,4 +94,11 @@ function updateVisuals(board){
 		}
 	}
 }
+
+//checks to see if it can move down, if it can then moves board downwards
+//moveDown(board: Board): void
+function moveDown(board){
+
+}
+
 setInterval(() => updateVisuals(b, 100));
