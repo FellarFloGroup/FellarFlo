@@ -3,16 +3,16 @@ class Board{
 		this.board = [];
 		this.WIDTH = 10;
 		this.HEIGHT = 20;
-		for(let i = 0; i < this.WIDTH; i++){
-      this.board.push([]);
-			for(let j = 0; j < this.HEIGHT; j++){
-				this.board[i].push({isEmpty: () => true});
+		for(let i = 0; i < this.HEIGHT; i++){
+      		this.board.push([]);
+			for(let j = 0; j < this.WIDTH; j++){
+				this.board[i].push({isEmpty: () => true, color: () => "gray"});
 			}
 		}
 		if(stringRep !== ''){
-			let j = 0;
+			let i = 0;
 			stringRep.split('|').forEach(line => {
-				let i = 0;
+				let j = 0;
 				line.split(',').forEach(spot => {
 					if(spot === 'r'){
 						this.board[i][j] = {isEmpty: () => false, color: () => 'red'};
@@ -21,17 +21,17 @@ class Board{
 					} else if(spot === 'b'){
 						this.board[i][j] = {isEmpty: () => false, color: () => 'blue'};
 					}
-					i++;
+					j++;
 				});
-				j++;
+				i++;
 			});
 			
 		}
 	}
 	toString(){
 		let out = "";
-		for(let i = 0; i < this.WIDTH; i++){
-			for(let j = 0; j < this.HEIGHT; j++){
+		for(let i = 0; i < this.HEIGHT; i++){
+			for(let j = 0; j < this.WIDTH; j++){
 				if(this.board[i][j].isEmpty()){
 					out += 'e,';
 				} else if(this.board[i][j].color() === 'red'){
@@ -50,11 +50,47 @@ class Board{
 
 
 var socket = io();
-b = new Board('');
+b = new Board();
+let counter = 0;
 socket.on('message', function(data) {
-  let h1 = document.createElement("H1");
-  h1.innerHTML = data;
-  document.body.appendChild(h1);
-  console.log(b.toString());
+	b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
+	b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
+	counter += 1;
 });
 
+//dark mode ftw
+document.body.style.backgroundColor = "black";
+
+//Making tetris board
+let table = document.createElement("table");
+table.style.marginLeft = 'auto';
+table.style.marginRight = 'auto';
+let tableBody = document.createElement("tbody");
+table.appendChild(tableBody);
+for(let i = 0; i < b.HEIGHT; i++){
+  let row = document.createElement("tr");
+  tableBody.appendChild(row);
+  for(let j = 0; j < b.WIDTH; j++){
+	let cell = document.createElement("td");
+	cell.id = `tablecell${i},${j}`;
+    cell.style.width = 25;
+    cell.style.height = 25;
+    cell.style.backgroundColor = `rgb(${(255 * (i / b.HEIGHT))},0,${(255 * (j / b.WIDTH))})`;
+    row.appendChild(cell);
+  }
+}
+document.body.appendChild(table);
+
+//updateVisuals(board: Board): void
+function updateVisuals(board){
+	console.log(b.toString());
+	for(let i = 0; i < board.HEIGHT; i++){
+		for(let j = 0; j < board.WIDTH; j++){
+			document.getElementById(`tablecell${i},${j}`).style.backgroundColor = board.board[i][j].color();
+			if(board.board[i][j].color() !== 'gray'){
+				console.log("hiii");
+			}
+		}
+	}
+}
+setInterval(() => updateVisuals(b, 100));
