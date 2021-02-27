@@ -152,16 +152,14 @@ function updateVisuals(board,playerPiece){
 	}
 
 	//draws playerPiece
-	console.log(playerPiece.piece);
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-			console.log("line 129");
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
 				document.getElementById(`tablecell${playerPiece.y-i-playerPiece.piece.centerY},${playerPiece.x-j-playerPiece.piece.centerX}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 			}
 		}
 	}
-	document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
+	// document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -194,3 +192,21 @@ setInterval(() => {
 	}
 	updateVisuals(b, playerPiece);
 }, 100);
+
+
+document.onkeydown = function (e) {
+    e = e || window.event;
+	// use e.keyCode
+	if (e.keyCode == '38') {
+        playerPiece.y -= 1;
+    }
+    else if (e.keyCode == '40') {
+        playerPiece.y += 1;
+    }
+    else if (e.keyCode == '37') {
+       playerPiece.x -= 1;
+    }
+    else if (e.keyCode == '39') {
+       playerPiece.x += 1;
+    }
+};
