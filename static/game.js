@@ -88,9 +88,6 @@ function updateVisuals(board){
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
 			document.getElementById(`tablecell${i},${j}`).style.backgroundColor = board.board[i][j].color();
-			if(board.board[i][j].color() !== 'gray'){
-				console.log("hiii");
-			}
 		}
 	}
 }
@@ -98,7 +95,7 @@ function updateVisuals(board){
 //checks to see if it can move down, if it can then moves board downwards
 //moveDown(board: Board): void
 function moveDown(board){
-
+	
 }
 
 setInterval(() => updateVisuals(b, 100));
