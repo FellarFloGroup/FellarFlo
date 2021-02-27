@@ -86,17 +86,41 @@ PIECES = {
 			{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0}
 		],
-	"rightL" : [
+	"rightL": [
 			{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel(), new Pixel(), new Pixel('green')], [new Pixel('green'), new Pixel('green'), new Pixel('green')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
-		]
+		],
+	"square": [
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+		],
+	"line": [
+			{piece:[[new Pixel('pink'), new Pixel('pink'),new Pixel('pink'),new Pixel('pink')]], centerX: -2, centerY: 0},
+			{piece:[[new Pixel('pink')], [new Pixel('pink')], [new Pixel('pink')], [new Pixel('pink')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('pink'), new Pixel('pink'),new Pixel('pink'),new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink')], [new Pixel('pink')],[new Pixel('pink')],[new Pixel('pink')]], centerX: 0, centerY: -2}
+		],
+	"T": [
+			{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('purple'),new Pixel()], [new Pixel('purple') ,new Pixel('purple')], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
+		],
+	// "Z": [
+	// 		{piece:[[new Pixel('blue'), new Pixel()],[new Pixel('blue'),new Pixel('blue')],[new Pixel(),new Pixel('blue')]], centerX: -1, centerY: 0},
+	// 		{piece:[[new Pixel('blue'),new Pixel('blue'), new Pixel()], [new Pixel() ,new Pixel('blue'),new], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
+	// 		{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
+	// 		{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
+	// 	],
 };
 
 
 let playerPiece = {
-	piece: PIECES['rightL'][0],
+	piece: PIECES['T'][0],
 	x: 5,
 	y: 5
 };
@@ -107,7 +131,7 @@ let counter = 0;
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	playerPiece.piece = PIECES['leftL'][counter%4];
+	playerPiece.piece = PIECES['T'][counter%4];
 	counter += 1;
 });
 
@@ -143,7 +167,7 @@ for(let i = 0; i < b.HEIGHT; i++){
 document.body.appendChild(table);
 
 //updateVisuals(board: Board): void
-function updateVisuals(board,playerPiece){
+function updateVisuals(board, playerPiece){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
@@ -155,11 +179,13 @@ function updateVisuals(board,playerPiece){
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
-				document.getElementById(`tablecell${playerPiece.y-i-playerPiece.piece.centerY},${playerPiece.x-j-playerPiece.piece.centerX}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
+				let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+				let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+				document.getElementById(`tablecell${yPos},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 			}
 		}
 	}
-	// document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
+	document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -183,6 +209,28 @@ function checkEmpty(board, i){
 	return true;
 }
 
+function changePlayerPiece(playerPiece, pieceStr){
+	playerPiece.piece = PIECES[pieceStr];
+	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+			if(!playerPiece.piece.piece[i][j].isEmpty()){
+				while(playerPiece.y-i-playerPiece.piece.centerY < 0){
+					playerPiece.y += 1;
+				}
+				while(playerPiece.y-i-playerPiece.piece.centerY >= board.HEIGHT){
+					playerPiece.y -= 1;
+				}
+				while(playerPiece.x-j-playerPiece.piece.centerX < 0){
+					playerPiece.x += 1;
+				}
+				while(playerPiece.x-j-playerPiece.piece.centerX >= board.WIDTH){
+					playerPiece.x -= 1;
+				}
+			}
+		}
+	}
+}
+
 
 setInterval(() => {
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
@@ -197,16 +245,41 @@ setInterval(() => {
 document.onkeydown = function (e) {
     e = e || window.event;
 	// use e.keyCode
-	if (e.keyCode == '38') {
-        playerPiece.y -= 1;
-    }
-    else if (e.keyCode == '40') {
-        playerPiece.y += 1;
-    }
-    else if (e.keyCode == '37') {
-       playerPiece.x -= 1;
-    }
-    else if (e.keyCode == '39') {
-       playerPiece.x += 1;
-    }
+    if (e.keyCode == '40') {
+		let change = 1;
+	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					while(playerPiece.y+(change)-i-playerPiece.piece.centerY >= b.HEIGHT){
+						change -= 1;
+					}
+				}
+			}
+		}
+		playerPiece.y += change;
+    } else if (e.keyCode == '37') {
+		let change = 1;
+	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					while(playerPiece.x-(change)-j-playerPiece.piece.centerX < 0){
+						change -= 1;
+					}
+				}
+			}
+		}
+		playerPiece.x -= change;
+    } else if (e.keyCode == '39') {
+		let change = 1;
+	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					while(playerPiece.x+(change)-j-playerPiece.piece.centerX >= b.WIDTH){
+						change -= 1;
+					}
+				}
+			}
+		}
+		playerPiece.x += change;
+	}
 };
