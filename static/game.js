@@ -1,3 +1,15 @@
+class Pixel{
+	constructor(color="empty"){
+		if(color === "empty"){
+			this.isEmpty = () => true;
+			this.color = () => "gray";
+		} else {
+			this.isEmpty = () => false;
+			this.color = () => color;
+		}
+	}
+}
+
 class Board{
 	constructor(stringRep=''){
 		//board[yCoord][xCoord]
@@ -8,7 +20,7 @@ class Board{
 		for(let i = 0; i < this.HEIGHT; i++){
       		this.board.push([]);
 			for(let j = 0; j < this.WIDTH; j++){
-				this.board[i].push({isEmpty: () => true, color: () => "gray"});
+				this.board[i].push(new Pixel());
 			}
 		}
 		if(stringRep !== ''){
@@ -17,11 +29,19 @@ class Board{
 				let j = 0;
 				line.split(',').forEach(spot => {
 					if(spot === 'r'){
-						this.board[i][j] = {isEmpty: () => false, color: () => 'red'};
+						this.board[i][j] = new Pixel('red');
 					} else if(spot === 'g'){
-						this.board[i][j] = {isEmpty: () => false, color: () => 'green'};
+						this.board[i][j] = new Pixel('green');
 					} else if(spot === 'b'){
-						this.board[i][j] = {isEmpty: () => false, color: () => 'blue'};
+						this.board[i][j] = new Pixel('blue');
+					} else if(spot === 'o'){
+						this.board[i][j] = new Pixel('orange');
+					} else if(spot === 'y'){
+						this.board[i][j] = new Pixel('yellow');
+					} else if(spot === 'u'){
+						this.board[i][j] = new Pixel('purple');
+					} else if(spot === 'i'){
+						this.board[i][j] = new Pixel('pink');
 					}
 					j++;
 				});
@@ -42,6 +62,14 @@ class Board{
 					out += 'g,';
 				} else if(this.board[i][j].color() === 'blue'){
 					out += 'b,';
+				} else if(this.board[i][j].color() === 'orange'){
+					out += 'o,';
+				} else if(this.board[i][j].color() === 'yellow'){
+					out += 'y,';
+				} else if(this.board[i][j].color() === 'purple'){
+					out += 'u,';
+				} else if(this.board[i][j].color() === 'pink'){
+					out += 'i,';
 				}
 			}
 			out += '|';
@@ -51,13 +79,36 @@ class Board{
 }
 
 
+PIECES = {
+	"leftL": [
+			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0}
+		],
+	"rightL" : [
+			{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel(), new Pixel('green')], [new Pixel('green'), new Pixel('green'), new Pixel('green')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
+		]
+};
+
+
+let playerPiece = {
+	piece: PIECES['rightL'][0],
+	x: 5,
+	y: 5
+};
+
 var socket = io();
 b = new Board();
 let counter = 0;
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	// counter += 1;
+	playerPiece.piece = PIECES['leftL'][counter%4];
+	counter += 1;
 });
 
 for(let i = 5; i < 10; i++){
@@ -92,12 +143,25 @@ for(let i = 0; i < b.HEIGHT; i++){
 document.body.appendChild(table);
 
 //updateVisuals(board: Board): void
-function updateVisuals(board){
+function updateVisuals(board,playerPiece){
+	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
 			document.getElementById(`tablecell${board.HEIGHT - (i + 1)},${j}`).style.backgroundColor = board.board[i][j].color();
 		}
 	}
+
+	//draws playerPiece
+	console.log(playerPiece.piece);
+	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+			console.log("line 129");
+			if(!playerPiece.piece.piece[i][j].isEmpty()){
+				document.getElementById(`tablecell${playerPiece.y-i-playerPiece.piece.centerY},${playerPiece.x-j-playerPiece.piece.centerX}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
+			}
+		}
+	}
+	document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -121,11 +185,12 @@ function checkEmpty(board, i){
 	return true;
 }
 
+
 setInterval(() => {
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
 		if(checkEmpty(b, i)){
 			moveDown(b, i);
 		}
 	}
-	updateVisuals(b);
+	updateVisuals(b, playerPiece);
 }, 100);
