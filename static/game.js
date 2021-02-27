@@ -4,6 +4,7 @@ class Board{
 		this.board = [];
 		this.WIDTH = 10;
 		this.HEIGHT = 20;
+		this.highestPiece = 0;
 		for(let i = 0; i < this.HEIGHT; i++){
       		this.board.push([]);
 			for(let j = 0; j < this.WIDTH; j++){
@@ -54,10 +55,18 @@ var socket = io();
 b = new Board();
 let counter = 0;
 socket.on('message', function(data) {
-	b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
-	b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	counter += 1;
+	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
+	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
+	// counter += 1;
 });
+
+for(let i = 5; i < 10; i++){
+	b.board[i][i].color = () => 'blue';
+	b.board[i][i].isEmpty = () => false;
+}
+b.board[0][0].color = () => 'red';
+b.board[0][0].isEmpty = () => false;
+b.highestPiece = 4;
 
 //dark mode ftw
 document.body.style.backgroundColor = "black";
@@ -84,18 +93,39 @@ document.body.appendChild(table);
 
 //updateVisuals(board: Board): void
 function updateVisuals(board){
-	console.log(b.toString());
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
-			document.getElementById(`tablecell${i},${j}`).style.backgroundColor = board.board[i][j].color();
+			document.getElementById(`tablecell${board.HEIGHT - (i + 1)},${j}`).style.backgroundColor = board.board[i][j].color();
 		}
 	}
 }
 
-//checks to see if it can move down, if it can then moves board downwards
-//moveDown(board: Board): void
-function moveDown(board){
-	
+//moveDown(board: Board, emptyIdx: int): void
+function moveDown(board, emptyIdx){
+	for(let i = emptyIdx; i < board.HEIGHT - 1; i++){
+		board.board[i] = board.board[i+1];
+	}
+	for(let i = 0; i < board.WIDTH; i++){
+		board.board[board.HEIGHT - 1][i] = {isEmpty: () => true, color: () => 'gray'};
+	}
+	board.highestPiece -= 1; 
 }
 
-setInterval(() => updateVisuals(b, 100));
+//checkEmpty(board: Board, i: int): bool
+function checkEmpty(board, i){
+	for(let idx = 0; idx < board.board[i].length; idx++){
+		if(!board.board[i][idx].isEmpty()){
+			return false;
+		}
+	}
+	return true;
+}
+
+setInterval(() => {
+	for(let i = b.HEIGHT - 1; i >= 0; i--){
+		if(checkEmpty(b, i)){
+			moveDown(b, i);
+		}
+	}
+	updateVisuals(b);
+}, 100);
