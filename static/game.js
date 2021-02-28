@@ -117,18 +117,18 @@ PIECES = {
 	// 		{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 	// 	],
 };
+b = new Board();
 
 
 let playerPiece = {
 	piece: PIECES['T'][0],
-	x: 5,
-	y: 5,
-	pieceStr: "T",
+	x: 4,
+	y: b.HEIGHT - 1,
+	pieceStr: "rightL",
 	pieceIdx: 0
 };
 
 var socket = io();
-b = new Board();
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
@@ -148,6 +148,7 @@ document.body.style.backgroundColor = "black";
 
 //Making tetris board
 let table = document.createElement("table");
+table.style.marginTop = '5%';
 table.style.marginLeft = 'auto';
 table.style.marginRight = 'auto';
 let tableBody = document.createElement("tbody");
@@ -181,11 +182,11 @@ function updateVisuals(board, playerPiece){
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
 				let xPos = playerPiece.x-j-playerPiece.piece.centerX;
 				let yPos = playerPiece.y-i-playerPiece.piece.centerY;
-				document.getElementById(`tablecell${yPos},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
+				document.getElementById(`tablecell${board.HEIGHT - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 			}
 		}
 	}
-	document.getElementById(`tablecell${playerPiece.y},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
+	document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -250,6 +251,18 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 				while(playerPiece.x-j-playerPiece.piece.centerX >= b.WIDTH){
 					playerPiece.x -= 1;
 				}
+				while(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+					playerPiece.y += 1;
+				}
+				while(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+					playerPiece.y -= 1;
+				}
+				while(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+					playerPiece.x += 1;
+				}
+				while(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+					playerPiece.x -= 1;
+				}
 			}
 		}
 	}
@@ -274,19 +287,19 @@ document.onkeydown = function (e) {
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
-					while(playerPiece.y+(change)-i-playerPiece.piece.centerY >= b.HEIGHT){
+					while(playerPiece.y-(change)-i-playerPiece.piece.centerY < 0 || !b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
 						change -= 1;
 					}
 				}
 			}
 		}
-		playerPiece.y += change;
+		playerPiece.y -= change;
     } else if (e.keyCode == '37') {
 		let change = 1;
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
-					while(playerPiece.x-j-(change)-playerPiece.piece.centerX < 0){
+					while(playerPiece.x-j-(change)-playerPiece.piece.centerX < 0 || !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-change-playerPiece.piece.centerX].isEmpty()){
 						change -= 1;
 					}
 				}
@@ -298,7 +311,7 @@ document.onkeydown = function (e) {
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
-					while(playerPiece.x+(change)-j-playerPiece.piece.centerX >= b.WIDTH){
+					while(playerPiece.x+(change)-j-playerPiece.piece.centerX >= b.WIDTH || !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x+change-j-playerPiece.piece.centerX].isEmpty()){
 						change -= 1;
 					}
 				}
