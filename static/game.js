@@ -78,8 +78,8 @@ class Board{
 	}
 }
 
-
-PIECES = {
+const SPEED_DOWNWARDS = 100;
+const PIECES = {
 	"leftL": [
 			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('red'), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
@@ -121,7 +121,7 @@ b = new Board();
 
 
 let playerPiece = {
-	piece: PIECES['T'][0],
+	piece: PIECES['rightL'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
 	pieceStr: "rightL",
@@ -132,7 +132,7 @@ var socket = io();
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	rotatePlayerPiece(playerPiece);
+	// rotatePlayerPiece(playerPiece);
 });
 
 for(let i = 5; i < 10; i++){
@@ -186,7 +186,7 @@ function updateVisuals(board, playerPiece){
 			}
 		}
 	}
-	document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
+	// document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -235,6 +235,9 @@ function changePlayerPiece(playerPiece, pieceStr){
 function rotatePlayerPiece(playerPiece, dir="right"){
 	playerPiece.pieceIdx += (dir === 'right' ? 1 : -1);
 	playerPiece.pieceIdx %= 4;
+	while(playerPiece.pieceIdx < 0){
+		playerPiece.pieceIdx += 4;
+	}
 	playerPiece.piece = PIECES[playerPiece.pieceStr][playerPiece.pieceIdx];
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -268,6 +271,38 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 	}
 }
 
+function movePlayerDown(playerPiece){
+	let change = 1;
+	for(let i = 0; i < playerPiece.piece.piece.length; i++){
+		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+			if(!playerPiece.piece.piece[i][j].isEmpty()){
+				while(playerPiece.y-(change)-i-playerPiece.piece.centerY < 0 || !b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+					change -= 1;
+				}
+			}
+		}
+	}
+	playerPiece.y -= change;
+
+	//place piece down
+	if(change !== 1){
+		console.log("placed piece");
+		for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					console.log(`b.board[${playerPiece.y-i-playerPiece.piece.centerY}][${playerPiece.x-j-playerPiece.piece.centerX}]`);
+					b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
+				}
+			}
+		}
+		let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
+		playerPiece.piece = Object.values(PIECES)[pIdx][0];
+		playerPiece.pieceIdx = 0;
+		playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
+		playerPiece.x = 4,
+		playerPiece.y = b.HEIGHT - 1;
+	}
+}
 
 setInterval(() => {
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
@@ -278,11 +313,15 @@ setInterval(() => {
 	updateVisuals(b, playerPiece);
 }, 100);
 
+setInterval(() => {
+	movePlayerDown(playerPiece);
+}, SPEED_DOWNWARDS);
 
 document.onkeydown = function (e) {
     e = e || window.event;
 	// use e.keyCode
     if (e.keyCode == '40') {
+    	return;//just for now
 		let change = 1;
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -318,5 +357,9 @@ document.onkeydown = function (e) {
 			}
 		}
 		playerPiece.x += change;
+	} else if(e.key === 'a'){
+		rotatePlayerPiece(playerPiece, 'left');
+	} else if(e.key === 'd'){
+		rotatePlayerPiece(playerPiece, 'right');
 	}
 };
