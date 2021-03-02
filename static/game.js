@@ -78,7 +78,7 @@ class Board{
 	}
 }
 
-const SPEED_DOWNWARDS = 100;
+const SPEED_DOWNWARDS = 200;
 const PIECES = {
 	"leftL": [
 			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
@@ -182,6 +182,9 @@ function updateVisuals(board, playerPiece){
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
 				let xPos = playerPiece.x-j-playerPiece.piece.centerX;
 				let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+				if(yPos < 0){
+					continue;
+				}
 				document.getElementById(`tablecell${board.HEIGHT - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 			}
 		}
@@ -192,7 +195,11 @@ function updateVisuals(board, playerPiece){
 //moveDown(board: Board, emptyIdx: int): void
 function moveDown(board, emptyIdx){
 	for(let i = emptyIdx; i < board.HEIGHT - 1; i++){
-		board.board[i] = board.board[i+1];
+		let copy = [];
+		for(let j = 0; j < board.WIDTH; j++){
+			copy.push(board.board[i+1][j]);
+		}
+		board.board[i] = copy;
 	}
 	for(let i = 0; i < board.WIDTH; i++){
 		board.board[board.HEIGHT - 1][i] = {isEmpty: () => true, color: () => 'gray'};
@@ -208,6 +215,23 @@ function checkEmpty(board, i){
 		}
 	}
 	return true;
+}
+
+//checkFull(board: Board, i: int): bool
+function checkFull(board, i){
+	for(let idx = 0; idx < board.WIDTH; idx++){
+		if(board.board[i][idx].isEmpty()){
+			return false;
+		}
+	}
+	return true;
+}
+
+//clearRow(board: Board, i: int): void
+function clearRow(board, i){
+	for(let idx = 0; idx < board.WIDTH; idx++){
+		board.board[i][idx] = new Pixel();
+	}
 }
 
 function changePlayerPiece(playerPiece, pieceStr){
@@ -271,11 +295,17 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 	}
 }
 
+let framesUntilPlace = 10;
+
+//movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
 function movePlayerDown(playerPiece){
 	let change = 1;
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
+				if(playerPiece.y-(change)-i-playerPiece.piece.centerY >= 0 && b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY]===undefined){
+					continue;
+				}
 				while(playerPiece.y-(change)-i-playerPiece.piece.centerY < 0 || !b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
 					change -= 1;
 				}
@@ -286,42 +316,70 @@ function movePlayerDown(playerPiece){
 
 	//place piece down
 	if(change !== 1){
-		console.log("placed piece");
-		for(let i = 0; i < playerPiece.piece.piece.length; i++){
-			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-				if(!playerPiece.piece.piece[i][j].isEmpty()){
-					console.log(`b.board[${playerPiece.y-i-playerPiece.piece.centerY}][${playerPiece.x-j-playerPiece.piece.centerX}]`);
-					b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
+		if(framesUntilPlace === 0){
+			console.log("placed piece");
+			for(let i = 0; i < playerPiece.piece.piece.length; i++){
+				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						console.log(`b.board[${playerPiece.y-i-playerPiece.piece.centerY}][${playerPiece.x-j-playerPiece.piece.centerX}]`);
+						b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
+						if(playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
+							return true;
+						}
+					}
 				}
 			}
+			let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
+			playerPiece.piece = Object.values(PIECES)[pIdx][0];
+			playerPiece.pieceIdx = 0;
+			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
+			playerPiece.x = 4,
+			playerPiece.y = b.HEIGHT - 1;
+			for(let i = 0; i < playerPiece.piece.piece.length; i++){
+				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						if(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+							return true;
+						}
+					}
+				}
+			}
+		} else {
+			framesUntilPlace--;
 		}
-		let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
-		playerPiece.piece = Object.values(PIECES)[pIdx][0];
-		playerPiece.pieceIdx = 0;
-		playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
-		playerPiece.x = 4,
-		playerPiece.y = b.HEIGHT - 1;
+	} else {
+		framesUntilPlace = 10;
 	}
+	return false;
+}
+
+function lose(){
+	clearInterval(interval);
+	document.onkeydown = e => {};
 }
 
 setInterval(() => {
+	updateVisuals(b, playerPiece);
+}, 50);
+
+let interval = setInterval(() => {
+	if(movePlayerDown(playerPiece)){
+		lose();
+	}
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
-		if(checkEmpty(b, i)){
+		if(checkFull(b, i)){
+			clearRow(b, i);
+			moveDown(b, i);
+		} else if(checkEmpty(b, i)){
 			moveDown(b, i);
 		}
 	}
-	updateVisuals(b, playerPiece);
-}, 100);
-
-setInterval(() => {
-	movePlayerDown(playerPiece);
 }, SPEED_DOWNWARDS);
 
 document.onkeydown = function (e) {
     e = e || window.event;
 	// use e.keyCode
     if (e.keyCode == '40') {
-    	return;//just for now
 		let change = 1;
 	   	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
