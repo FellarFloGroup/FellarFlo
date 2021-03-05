@@ -295,7 +295,7 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 	}
 }
 
-let framesUntilPlace = 10;
+let framesUntilPlace = 2;
 
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
 function movePlayerDown(playerPiece){
@@ -348,7 +348,7 @@ function movePlayerDown(playerPiece){
 			framesUntilPlace--;
 		}
 	} else {
-		framesUntilPlace = 10;
+		framesUntilPlace = 2;
 	}
 	return false;
 }
