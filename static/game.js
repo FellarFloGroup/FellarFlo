@@ -184,7 +184,7 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
 					let xPos = playerPiece.x-j-playerPiece.piece.centerX;
 					let yPos = playerPiece.y-i-playerPiece.piece.centerY;
-					if(yPos < 0){
+					if(yPos < 0 || yPos >= b.HEIGHT){
 						continue;
 					}
 					document.getElementById(`tablecell${board.HEIGHT  - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
@@ -336,21 +336,30 @@ function movePlayerDown(playerPiece){
 			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
 			playerPiece.x = 4;
 			playerPiece.y = b.HEIGHT - 1;
+			let badPieceCounter = 0;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 					if(!playerPiece.piece.piece[i][j].isEmpty()){
 						if (playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
-							if(b.board[playerPiece.y - 1 -i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-								continue;
+							if(!b.board[b.HEIGHT - 1][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+								badPieceCounter += 1;
 							}
-							return true;
 						}
-
-						if(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-							return true;
+						if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+							badPieceCounter += 1;
 						}
 					}
 				}
+			}
+			if(badPieceCounter >= 1){
+				for(let i = 0; i < playerPiece.piece.piece.length; i++){
+					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+						while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+							playerPiece.y += 1;
+						}
+					}
+				}
+				return true;
 			}
 		} else {
 			framesUntilPlace--;
@@ -365,7 +374,8 @@ function lose(){
 	clearInterval(gameInterval);
 	clearInterval(visualInterval);
 	document.onkeydown = e => {};
-	updateVisuals(b, playerPiece, false);
+	updateVisuals(b, playerPiece);
+	console.log("you lose");
 }
 
 let visualInterval = setInterval(() => {
