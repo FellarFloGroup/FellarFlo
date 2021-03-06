@@ -320,10 +320,10 @@ function movePlayerDown(playerPiece){
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 					if(!playerPiece.piece.piece[i][j].isEmpty()){
-						b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
 						if(playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
 							return true;
 						}
+						b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
 					}
 				}
 			}
