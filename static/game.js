@@ -40,8 +40,8 @@ class Board{
 						this.board[i][j] = new Pixel('yellow');
 					} else if(spot === 'u'){
 						this.board[i][j] = new Pixel('purple');
-					} else if(spot === 'i'){
-						this.board[i][j] = new Pixel('pink');
+					} else if(spot === 'c'){
+						this.board[i][j] = new Pixel('cyan');
 					}
 					j++;
 				});
@@ -68,8 +68,8 @@ class Board{
 					out += 'y,';
 				} else if(this.board[i][j].color() === 'purple'){
 					out += 'u,';
-				} else if(this.board[i][j].color() === 'pink'){
-					out += 'i,';
+				} else if(this.board[i][j].color() === 'cyan'){
+					out += 'c,';
 				}
 			}
 			out += '|';
@@ -99,10 +99,10 @@ const PIECES = {
 			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 		],
 	"line": [
-			{piece:[[new Pixel('pink'), new Pixel('pink'),new Pixel('pink'),new Pixel('pink')]], centerX: -2, centerY: 0},
-			{piece:[[new Pixel('pink')], [new Pixel('pink')], [new Pixel('pink')], [new Pixel('pink')]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel('pink'), new Pixel('pink'),new Pixel('pink'),new Pixel('pink')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('pink')], [new Pixel('pink')],[new Pixel('pink')],[new Pixel('pink')]], centerX: 0, centerY: -2}
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -2, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')]], centerX: 0, centerY: -2}
 		],
 	"T": [
 			{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
