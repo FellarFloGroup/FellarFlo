@@ -53,15 +53,15 @@ io.on('connection', function(socket) {
 				leaderboard[j] = leaderboard[j-1];
 			}
 			leaderboard[idx] = [name, score];
-		});
-		fileStr = "";
-		for(let i = 0; i < leaderboard.length; i++){
-			fileStr += `${leaderboard[i][0]}-${leaderboard[i][1]}`;
-			if(i < leaderboard.length - 1){
-				fileStr += `\n`;
+			fileStr = "";
+			for(let i = 0; i < leaderboard.length; i++){
+				fileStr += `${leaderboard[i][0]}-${leaderboard[i][1]}`;
+				if(i < leaderboard.length - 1){
+					fileStr += `\n`;
+				}
 			}
-		}
-		fs.writeFile('leaderboard.ranking', fileStr, () => {});
+			fs.writeFile('leaderboard.ranking', fileStr, () => {});
+		});
 	});
 });
 
