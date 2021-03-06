@@ -135,13 +135,6 @@ socket.on('message', function(data) {
 	// rotatePlayerPiece(playerPiece);
 });
 
-for(let i = 5; i < 10; i++){
-	b.board[i][i].color = () => 'blue';
-	b.board[i][i].isEmpty = () => false;
-}
-b.board[0][0].color = () => 'red';
-b.board[0][0].isEmpty = () => false;
-b.highestPiece = 4;
 
 //dark mode ftw
 document.body.style.backgroundColor = "black";
