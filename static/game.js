@@ -133,6 +133,9 @@ let playerPiece = {
 };
 
 var socket = io();
+socket.on('connect', () => {
+	console.log(socket.id);
+});
 socket.on('message', function(data) {
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
 	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
@@ -393,7 +396,22 @@ function lose(){
 	loseText.style.fontSize = "150px";
 	loseText.style.top = table.style.top.substring(0,-2) + 250;
 	document.body.appendChild(loseText);
-	console.log("you lose");
+  	socket.emit('leaderboard', score);
+  	socket.on('leaderboard', (data, rank) => {
+  		if(rank >= 0){
+			let name = prompt("Please enter your name", "");
+			socket.emit('leaderboardname', name);
+			for(let j = data.length - 1; j > rank; j--){
+				data[j] = data[j-1];
+			}
+			data[rank] = [name, score];
+  		}
+  		let leaderboardText = `<font style='font-size: 20px'><br>`;
+  		for(let i = 0; i < data.length; i++){
+  			leaderboardText += `<br>${i + 1}. ${data[i][0]} - ${data[i][1]}`;
+  		}
+  		loseText.innerHTML += `${leaderboardText}</font>`;
+  	});
 }
 
 let visualInterval = setInterval(() => {
