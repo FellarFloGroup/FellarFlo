@@ -168,7 +168,7 @@ for(let i = 0; i < b.HEIGHT; i++){
 document.body.appendChild(table);
 
 //updateVisuals(board: Board): void
-function updateVisuals(board, playerPiece){
+function updateVisuals(board, playerPiece, showPlayerPiece=true){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
@@ -177,15 +177,18 @@ function updateVisuals(board, playerPiece){
 	}
 
 	//draws playerPiece
-	for(let i = 0; i < playerPiece.piece.piece.length; i++){
-		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-			if(!playerPiece.piece.piece[i][j].isEmpty()){
-				let xPos = playerPiece.x-j-playerPiece.piece.centerX;
-				let yPos = playerPiece.y-i-playerPiece.piece.centerY;
-				if(yPos < 0){
-					continue;
+	if(showPlayerPiece){
+		
+		for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+					let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+					if(yPos < 0){
+						continue;
+					}
+					document.getElementById(`tablecell${board.HEIGHT  - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 				}
-				document.getElementById(`tablecell${board.HEIGHT - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
 			}
 		}
 	}
@@ -317,11 +320,9 @@ function movePlayerDown(playerPiece){
 	//place piece down
 	if(change !== 1){
 		if(framesUntilPlace === 0){
-			console.log("placed piece");
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 					if(!playerPiece.piece.piece[i][j].isEmpty()){
-						console.log(`b.board[${playerPiece.y-i-playerPiece.piece.centerY}][${playerPiece.x-j-playerPiece.piece.centerX}]`);
 						b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX] = playerPiece.piece.piece[i][j];
 						if(playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
 							return true;
@@ -333,11 +334,18 @@ function movePlayerDown(playerPiece){
 			playerPiece.piece = Object.values(PIECES)[pIdx][0];
 			playerPiece.pieceIdx = 0;
 			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
-			playerPiece.x = 4,
+			playerPiece.x = 4;
 			playerPiece.y = b.HEIGHT - 1;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						if (playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
+							if(b.board[playerPiece.y - 1 -i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+								continue;
+							}
+							return true;
+						}
+
 						if(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
 							return true;
 						}
@@ -354,15 +362,17 @@ function movePlayerDown(playerPiece){
 }
 
 function lose(){
-	clearInterval(interval);
+	clearInterval(gameInterval);
+	clearInterval(visualInterval);
 	document.onkeydown = e => {};
+	updateVisuals(b, playerPiece, false);
 }
 
-setInterval(() => {
+let visualInterval = setInterval(() => {
 	updateVisuals(b, playerPiece);
 }, 50);
 
-let interval = setInterval(() => {
+let gameInterval = setInterval(() => {
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
