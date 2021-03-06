@@ -82,9 +82,9 @@ const SPEED_DOWNWARDS = 200;
 const PIECES = {
 	"leftL": [
 			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel('red'), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0}
+			{piece:[[new Pixel('red'), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1}
 		],
 	"rightL": [
 			{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
@@ -110,6 +110,10 @@ const PIECES = {
 			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 		],
+	// "leftZ": [
+	// 		{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1}
+
+	// ]
 	// "Z": [
 	// 		{piece:[[new Pixel('blue'), new Pixel()],[new Pixel('blue'),new Pixel('blue')],[new Pixel(),new Pixel('blue')]], centerX: -1, centerY: 0},
 	// 		{piece:[[new Pixel('blue'),new Pixel('blue'), new Pixel()], [new Pixel() ,new Pixel('blue'),new], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
@@ -121,10 +125,10 @@ let b = new Board();
 let score = 0;
 
 let playerPiece = {
-	piece: PIECES['rightL'][0],
+	piece: PIECES['leftL'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
-	pieceStr: "rightL",
+	pieceStr: "leftL",
 	pieceIdx: 0
 };
 
