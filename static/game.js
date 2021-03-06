@@ -117,8 +117,8 @@ const PIECES = {
 	// 		{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 	// 	],
 };
-b = new Board();
-
+let b = new Board();
+let score = 0;
 
 let playerPiece = {
 	piece: PIECES['rightL'][0],
@@ -329,6 +329,7 @@ function movePlayerDown(playerPiece){
 			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
 			playerPiece.x = 4;
 			playerPiece.y = b.HEIGHT - 1;
+			score += 1;
 			let badPieceCounter = 0;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -368,6 +369,26 @@ function lose(){
 	clearInterval(visualInterval);
 	document.onkeydown = e => {};
 	updateVisuals(b, playerPiece);
+	let dimDiv = document.createElement('div');
+	dimDiv.style.opacity = 0.5;
+	dimDiv.style.position = "fixed";
+	dimDiv.style.left = "0px";
+	dimDiv.style.top = "0px";
+	dimDiv.style.backgroundColor = "black";
+	dimDiv.style.width = "100%";
+	dimDiv.style.height = "100%";
+	document.body.appendChild(dimDiv);
+	let loseText = document.createElement("h1");
+	loseText.style.color = "white";
+	loseText.style.position = "fixed";
+	loseText.innerHTML = `You lose<br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.style.margin = "auto";
+	loseText.style.zIndex = "1000";
+	loseText.style.width = "100%";
+	loseText.style.textAlign = "center";
+	loseText.style.fontSize = "150px";
+	loseText.style.top = table.style.top.substring(0,-2) + 250;
+	document.body.appendChild(loseText);
 	console.log("you lose");
 }
 
@@ -379,14 +400,17 @@ let gameInterval = setInterval(() => {
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
+	let rowsCleared = 0;
 	for(let i = b.HEIGHT - 1; i >= 0; i--){
 		if(checkFull(b, i)){
 			clearRow(b, i);
+			rowsCleared += 1;
 			moveDown(b, i);
 		} else if(checkEmpty(b, i)){
 			moveDown(b, i);
 		}
 	}
+	score += rowsCleared * rowsCleared;
 }, SPEED_DOWNWARDS);
 
 document.onkeydown = function (e) {
