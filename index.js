@@ -15,7 +15,7 @@ fs.readFile("leaderboard.ranking", function(error, contents) {
 	leaderboard = contents.toString().split('\n').map(e => {
 		for(let i = e.length - 1; i >= 0; i--){
 			if(e.substring(i, i+1) === '-'){
-				return [e.substring(0,i), parseInt(e.substring(i+1, e.length-1))];
+				return [e.substring(0,i), parseInt(e.substring(i+1, e.length))];
 			}
 		}
 	});
