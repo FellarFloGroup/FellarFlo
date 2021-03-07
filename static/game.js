@@ -37,7 +37,7 @@ class Board{
 					} else if(spot === 'o'){
 						this.board[i][j] = new Pixel('orange');
 					} else if(spot === 'y'){
-						this.board[i][j] = new Pixel('yellow');
+						this.board[i][j] = new Pixel('teal');
 					} else if(spot === 'u'){
 						this.board[i][j] = new Pixel('purple');
 					} else if(spot === 'c'){
@@ -64,7 +64,7 @@ class Board{
 					out += 'b,';
 				} else if(this.board[i][j].color() === 'orange'){
 					out += 'o,';
-				} else if(this.board[i][j].color() === 'yellow'){
+				} else if(this.board[i][j].color() === 'teal'){
 					out += 'y,';
 				} else if(this.board[i][j].color() === 'purple'){
 					out += 'u,';
@@ -110,25 +110,28 @@ const PIECES = {
 			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 		],
-	// "leftZ": [
-	// 		{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1}
+	"leftZ": [
+			{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel()], [new Pixel(), new Pixel('blue'), new Pixel('blue')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel()], [new Pixel(), new Pixel('blue'), new Pixel('blue')]], centerX: -1, centerY: -1}
+		],
+	"rightZ": [
+			{piece:[[new Pixel('teal'), new Pixel()], [new Pixel('teal'), new Pixel('teal')], [new Pixel(), new Pixel('teal')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel()]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('teal'), new Pixel()], [new Pixel('teal'), new Pixel('teal')], [new Pixel(), new Pixel('teal')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel()]], centerX: -1, centerY: -1}
 
-	// ]
-	// "Z": [
-	// 		{piece:[[new Pixel('blue'), new Pixel()],[new Pixel('blue'),new Pixel('blue')],[new Pixel(),new Pixel('blue')]], centerX: -1, centerY: 0},
-	// 		{piece:[[new Pixel('blue'),new Pixel('blue'), new Pixel()], [new Pixel() ,new Pixel('blue'),new], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
-	// 		{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
-	// 		{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
-	// 	],
+	]
 };
 let b = new Board();
 let score = 0;
 
 let playerPiece = {
-	piece: PIECES['leftL'][0],
+	piece: PIECES['rightZ'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
-	pieceStr: "leftL",
+	pieceStr: "rightZ",
 	pieceIdx: 0
 };
 
