@@ -79,6 +79,15 @@ class Board{
 }
 
 const SPEED_DOWNWARDS = 200;
+const PIECES_IMG = {
+	"leftL": "leftL.png",
+	"rightL": "rightL.png",
+	"square": "square.png",
+	"line": "line.png",
+	"T": "T.png",
+	"leftZ": "leftZ.png",
+	"rightZ": "rightZ.png"
+};
 const PIECES = {
 	"leftL": [
 			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
