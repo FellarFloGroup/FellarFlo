@@ -153,6 +153,31 @@ socket.on('connect', () => {
 //dark mode ftw
 document.body.style.backgroundColor = "black";
 
+//Making three sections
+const sections = document.createElement('table');
+sections.style.position = 'fixed';
+sections.style.top = '0px';
+sections.style.left = '0px';
+sections.style.width = '100%';
+sections.style.height = '100%';
+document.body.appendChild(sections);
+const sectionsBody = document.createElement('tbody');
+sections.appendChild(sectionsBody);
+const sectionsRow = document.createElement('tr');
+sectionsBody.appendChild(sectionsRow);
+const leftSection = document.createElement('td');
+leftSection.style.width = '33%';
+leftSection.style.height = '100%';
+sectionsRow.appendChild(leftSection);
+const middleSection = document.createElement('td');
+middleSection.style.width = '34%';
+middleSection.style.height = '100%';
+sectionsRow.appendChild(middleSection);
+const rightSection = document.createElement('td');
+rightSection.style.width = '33%';
+rightSection.style.height = '100%';
+sectionsRow.appendChild(rightSection);
+
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
 scoreLabel.style.color = 'white';
@@ -160,7 +185,7 @@ scoreLabel.style.marginLeft = 'auto';
 scoreLabel.style.marginRight = 'auto';
 scoreLabel.style.textAlign = 'center';
 scoreLabel.innerHTML = 'Score: 0pts'
-document.body.appendChild(scoreLabel);
+middleSection.appendChild(scoreLabel);
 
 //Making tetris board
 const table = document.createElement("table");
@@ -181,7 +206,7 @@ for(let i = 0; i < b.HEIGHT; i++){
     row.appendChild(cell);
   }
 }
-document.body.appendChild(table);
+middleSection.appendChild(table);
 
 
 function updateScoreVisual(score){
@@ -401,19 +426,20 @@ function lose(){
 	clearInterval(visualInterval);
 	document.onkeydown = e => {};
 	updateVisuals(b, playerPiece);
-	let dimDiv = document.createElement('div');
+	const dimDiv = document.createElement('div');
 	dimDiv.style.opacity = 0.5;
 	dimDiv.style.position = "fixed";
-	dimDiv.style.left = "0px";
+	dimDiv.style.marginLeft = 'auto';
+	dimDiv.style.marginRight = 'auto';
 	dimDiv.style.top = "0px";
 	dimDiv.style.backgroundColor = "black";
-	dimDiv.style.width = "100%";
+	dimDiv.style.width = "34%";
 	dimDiv.style.height = "100%";
-	document.body.appendChild(dimDiv);
-	let loseText = document.createElement("h1");
+	middleSection.appendChild(dimDiv);
+	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
-	loseText.innerHTML = `Game Over<br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 30px;'>${score} points</font>`;
 	loseText.style.margin = "auto";
 	loseText.style.zIndex = "1000";
 	loseText.style.width = "100%";
@@ -436,11 +462,42 @@ function lose(){
 				data[rank] = [name, score];
 			}
   		}
-  		let leaderboardText = `<font style='font-size: 20px'><br>`;
+  		const leaderboardTable = document.createElement("table");
+  		leaderboardTable.style.position = 'fixed';
+  		leaderboardTable.style.bottom = "0px";
+  		leaderboardTable.style.left = '67%'; 
+  		leaderboardTable.style.border = '10px groove gray';
+  		leaderboardTable.style.color = 'white';
+  		rightSection.appendChild(leaderboardTable);
+  		const leaderboardBody = document.createElement("tbody");
+  		const titleRow = document.createElement('tr');
+  		leaderboardBody.appendChild(titleRow);
+  		const rankTitle = document.createElement("td");
+  		rankTitle.style.minWidth = "100px";
+  		titleRow.appendChild(rankTitle);
+  		const nameTitle = document.createElement("td");
+  		nameTitle.innerHTML = "Name";
+  		titleRow.appendChild(nameTitle);
+  		const scoreTitle = document.createElement("td");
+  		scoreTitle.innerHTML = "Score";
+  		titleRow.appendChild(scoreTitle);
+
+  		leaderboardTable.appendChild(leaderboardBody);
   		for(let i = 0; i < data.length; i++){
-  			leaderboardText += `<br>${i + 1}. ${data[i][0]} - ${data[i][1]}`;
+  			const row = document.createElement('tr');
+  			leaderboardBody.appendChild(row);
+  			const rankingTd = document.createElement('td');
+  			rankingTd.innerHTML = `${i + 1}.`;
+  			row.appendChild(rankingTd);
+  			const nameTd = document.createElement('td');
+  			nameTd.innerHTML = data[i][0];
+  			row.appendChild(nameTd);
+  			const scoreTd = document.createElement('td');
+  			scoreTd.innerHTML = data[i][1]
+  			row.appendChild(scoreTd);
   		}
-  		loseText.innerHTML += `${leaderboardText}</font>`;
+
+  		// loseText.innerHTML += `${leaderboardText}</font>`;
   	});
 }
 
