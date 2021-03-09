@@ -5,7 +5,6 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
     isMobile = true;
 }
 
-
 class Pixel{
 	constructor(color="empty"){
 		if(color === "empty"){
@@ -588,65 +587,52 @@ document.onkeydown = function (e) {
 };
 
 if(isMobile){
-	const bottomSection = document.createElement('table');
-	bottomSection.style.position = 'fixed';
-	bottomSection.style.bottom = 0;
-	document.body.appendChild(bottomSection);
-	bottomSection.style.width = "100%";
-	const rtLft = document.createElement("td");
-	const rotateLeftBtn = document.createElement('div');
-	rotateLeftBtn.style.backgroundColor = 'white';
-	rotateLeftBtn.style.width = screen.width * 0.25;
-	rotateLeftBtn.innerHTML = "<h1>↩</h1>";
-	rotateLeftBtn.style.cursor = "pointer";
-	rotateLeftBtn.style.textAlign = 'center';
-	rotateLeftBtn.onclick = () => rotatePlayerPiece(playerPiece, 'left');
-	bottomSection.appendChild(rtLft);
-	rtLft.appendChild(rotateLeftBtn);
+	document.addEventListener('click', (e) => rotatePlayerPiece(playerPiece, 'right'), false);
+	document.addEventListener('touchstart', handleTouchStart, false);        
+	document.addEventListener('touchmove', handleTouchMove, false);
 
-	const rtRght = document.createElement('td');
-	const rotateRightBtn = document.createElement('div');
-	rotateRightBtn.style.backgroundColor = 'white';
-	rotateRightBtn.style.width = screen.width * 0.25;
-	rotateRightBtn.innerHTML = "<h1>↪</h1>";
-	rotateRightBtn.style.cursor = "pointer";
-	rotateRightBtn.style.textAlign = 'center';
-	rotateRightBtn.onclick = () => rotatePlayerPiece(playerPiece, 'right');
-	rtRght.appendChild(rotateRightBtn);
-	bottomSection.appendChild(rtRght);
+	let xDown = null;                                                        
+	let yDown = null;
 
+	function getTouches(evt) {
+	  return evt.touches ||             // browser API
+	         evt.originalEvent.touches;
+	}
 
-	const mvLft = document.createElement('td');
-	mvLft.style.paddingLeft =  screen.width * 0.025;
-	const moveLeftBtn = document.createElement('div');
-	moveLeftBtn.style.backgroundColor = 'white';
-	moveLeftBtn.style.width =  screen.width * 0.15;
-	moveLeftBtn.innerHTML = "<h1>◀</h1>";
-	moveLeftBtn.style.cursor = "pointer";
-	moveLeftBtn.style.textAlign = 'center';
-	moveLeftBtn.onclick = () => move("left");
-	mvLft.appendChild(moveLeftBtn);
-	bottomSection.appendChild(mvLft);
+	function handleTouchStart(evt) {
+	    const firstTouch = getTouches(evt)[0];
+	    xDown = firstTouch.clientX;
+	    yDown = firstTouch.clientY;
+	};
 
-	const mvDwn = document.createElement('td');
-	const moveDownBtn = document.createElement('div');
-	moveDownBtn.style.backgroundColor = 'white';
-	moveDownBtn.style.width = screen.width * 0.15;
-	moveDownBtn.innerHTML = "<h1>🔽</h1>";
-	moveDownBtn.style.cursor = "pointer";
-	moveDownBtn.style.textAlign = 'center';
-	moveDownBtn.onclick = () => move("down");
-	mvDwn.appendChild(moveDownBtn);
-	bottomSection.appendChild(mvDwn);
+	function handleTouchMove(evt) {
+	    if (!xDown || !yDown) {
+	        return;
+	    }
 
-	const mvRght = document.createElement('td');
-	const moveRightBtn = document.createElement('div');
-	moveRightBtn.style.backgroundColor = 'white';
-	moveRightBtn.style.width = screen.width * 0.15;
-	moveRightBtn.innerHTML = "<h1>▶</h1>";
-	moveRightBtn.style.cursor = "pointer";
-	moveRightBtn.style.textAlign = 'center';
-	moveRightBtn.onclick = () => move("down");
-	mvRght.appendChild(moveRightBtn);
-	bottomSection.appendChild(mvRght);
+	    let xUp = evt.touches[0].clientX;
+	    let yUp = evt.touches[0].clientY;
+
+	    let xDiff = xDown - xUp;
+	    let yDiff = yDown - yUp;
+
+	    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+	        if ( xDiff > 0 ) {
+	            /* left swipe */
+	            move('left');
+	        } else {
+	            /* right swipe */
+	            move('right');
+	        }
+	    } else {
+	        if ( yDiff > 0 ) {
+	            /* up swipe */
+	        } else {
+	            move('down');
+	        }
+	    }
+	    /* reset values */
+	    xDown = null;
+	    yDown = null;                                             
+	};
 }
