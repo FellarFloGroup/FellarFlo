@@ -148,28 +148,32 @@ var socket = io();
 socket.on('connect', () => {
 	console.log(socket.id);
 });
-socket.on('message', function(data) {
-	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].color = () => 'blue';
-	// b.board[counter % b.HEIGHT][Math.round((counter / b.HEIGHT) - 0.5)].isEmpty = () => false;
-	// rotatePlayerPiece(playerPiece);
-});
 
 
 //dark mode ftw
 document.body.style.backgroundColor = "black";
 
+//Making tetris score label
+const scoreLabel = document.createElement('h1');
+scoreLabel.style.color = 'white';
+scoreLabel.style.marginLeft = 'auto';
+scoreLabel.style.marginRight = 'auto';
+scoreLabel.style.textAlign = 'center';
+scoreLabel.innerHTML = 'Score: 0pts'
+document.body.appendChild(scoreLabel);
+
 //Making tetris board
-let table = document.createElement("table");
+const table = document.createElement("table");
 table.style.marginTop = '5%';
 table.style.marginLeft = 'auto';
 table.style.marginRight = 'auto';
-let tableBody = document.createElement("tbody");
+const tableBody = document.createElement("tbody");
 table.appendChild(tableBody);
 for(let i = 0; i < b.HEIGHT; i++){
-  let row = document.createElement("tr");
+  const row = document.createElement("tr");
   tableBody.appendChild(row);
   for(let j = 0; j < b.WIDTH; j++){
-	let cell = document.createElement("td");
+	const cell = document.createElement("td");
 	cell.id = `tablecell${i},${j}`;
     cell.style.width = 25;
     cell.style.height = 25;
@@ -178,6 +182,15 @@ for(let i = 0; i < b.HEIGHT; i++){
   }
 }
 document.body.appendChild(table);
+
+
+function updateScoreVisual(score){
+	if(score === 1){
+		scoreLabel.innerHTML = `Score: 1 pt`;
+	} else {
+		scoreLabel.innerHTML = `Score: ${score} pts`;
+	}
+}
 
 //updateVisuals(board: Board): void
 function updateVisuals(board, playerPiece, showPlayerPiece=true){
@@ -400,7 +413,7 @@ function lose(){
 	let loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
-	loseText.innerHTML = `You lose<br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.innerHTML = `Game Over<br><font style='font-size: 30px;'>${score} points</font>`;
 	loseText.style.margin = "auto";
 	loseText.style.zIndex = "1000";
 	loseText.style.width = "100%";
@@ -408,6 +421,7 @@ function lose(){
 	loseText.style.fontSize = "150px";
 	loseText.style.top = table.style.top.substring(0,-2) + 250;
 	document.body.appendChild(loseText);
+	scoreLabel.style.display = 'none';
   	socket.emit('leaderboard', score);
   	socket.on('leaderboard', (data, rank) => {
   		if(rank >= 0){
@@ -416,7 +430,11 @@ function lose(){
 			for(let j = data.length - 1; j > rank; j--){
 				data[j] = data[j-1];
 			}
-			data[rank] = [name, score];
+			if(name === '' || name === null){
+				data[rank] = ['You', score];
+			} else {
+				data[rank] = [name, score];
+			}
   		}
   		let leaderboardText = `<font style='font-size: 20px'><br>`;
   		for(let i = 0; i < data.length; i++){
@@ -428,6 +446,7 @@ function lose(){
 
 let visualInterval = setInterval(() => {
 	updateVisuals(b, playerPiece);
+	updateScoreVisual(score);
 }, 50);
 
 let gameInterval = setInterval(() => {

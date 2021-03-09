@@ -49,18 +49,22 @@ io.on('connection', function(socket) {
 		}
 		io.sockets.to(clientId).emit("leaderboard", leaderboard, idx);
 		socket.on('leaderboardname', function(name){
-			for(let j = leaderboard.length - 1; j > idx; j--){
-				leaderboard[j] = leaderboard[j-1];
-			}
-			leaderboard[idx] = [name, score];
-			fileStr = "";
-			for(let i = 0; i < leaderboard.length; i++){
-				fileStr += `${leaderboard[i][0]}-${leaderboard[i][1]}`;
-				if(i < leaderboard.length - 1){
-					fileStr += `\n`;
+			if(name === '' || name === 'null'){
+				return;
+			} else {
+				for(let j = leaderboard.length - 1; j > idx; j--){
+					leaderboard[j] = leaderboard[j-1];
 				}
+				leaderboard[idx] = [name, score];
+				fileStr = "";
+				for(let i = 0; i < leaderboard.length; i++){
+					fileStr += `${leaderboard[i][0]}-${leaderboard[i][1]}`;
+					if(i < leaderboard.length - 1){
+						fileStr += `\n`;
+					}
+				}
+				fs.writeFile('leaderboard.ranking', fileStr, () => {});
 			}
-			fs.writeFile('leaderboard.ranking', fileStr, () => {});
 		});
 	});
 });
