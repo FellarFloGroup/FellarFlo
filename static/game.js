@@ -87,7 +87,7 @@ class Board{
 
 const SPEED_DOWNWARDS = 200;
 const PIECES_IMG = {
-	"leftL": "leftL.png",
+	"leftL": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fd%2Fde%2FPearl_Winter_White_Russian_Dwarf_Hamster_-_Front.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHamster&tbnid=rSodfVFOfsie0M&vet=12ahUKEwiy1NjI9LLvAhVHZN8KHXIYCdIQMygAegUIARCwAQ..i&docid=lIUkuH03JLTovM&w=2052&h=1128&q=hamster%20pics&ved=2ahUKEwiy1NjI9LLvAhVHZN8KHXIYCdIQMygAegUIARCwAQ",
 	"rightL": "rightL.png",
 	"square": "square.png",
 	"line": "line.png",
@@ -142,15 +142,20 @@ const PIECES = {
 };
 let b = new Board();
 let score = 0;
-
+let bool = 0;
+const totalPieces = ["leftL", "rightL", "square", "line", "T", "leftZ", "rightZ"];
+let queue = [];
+next_five('add');
 let playerPiece = {
 	piece: PIECES['rightZ'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
 	pieceStr: "rightZ",
 	pieceIdx: 0
+	//isHold : false;
 };
 let holdPiece = 'rightZ';
+let tempPiece = '';
 
 var socket = io();
 socket.on('connect', () => {
@@ -364,15 +369,40 @@ function setPlayerPiece(pieceStr){
 }
 
 function hold(){
-	const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
-	console.log(newHoldPiece);
-	setPlayerPiece(holdPiece);
-	holdPiece = newHoldPiece;
+	if (bool == 0){
+		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
+		setPlayerPiece(holdPiece);
+		holdPiece = newHoldPiece;
+		bool = 1;
+	}
 }
 
-var img = document.createElement('img');
-img.src = "C:/Users/ishita/Desktop/Blox/my_image.jpg";
-document.body.appendChild(img);
+function create_new_piece(){
+	let pIdx = Math.floor(Math.random() * Object.keys(totalPieces).length);
+	let newPiece = totalPieces[pIdx];
+	return newPiece
+}
+
+function next_five(action){
+	if (action == 'add'){
+		n = queue.length;
+		console.log(n);
+		for(let i = n ; i < 5 ; i++){
+			let pieceToBeAdded = create_new_piece();
+			//console.log(pieceToBeAdded);
+			queue[i] = pieceToBeAdded;
+		}
+		console.log(n)
+	}else if(action == 'pop'){
+		return queue[0];
+	}
+	for(let j = 0 ; j < n ; j++){
+		console.log(queue[j]);
+	}
+}
+//var img = document.createElement('img');
+//img.src = 'https://media.geeksforgeeks.org/wp-content/uploads/20190529122828/bs21.png';
+//document.body.appendChild(img);
 
 let framesUntilPlace = 2;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
@@ -405,6 +435,8 @@ function movePlayerDown(playerPiece){
 					}
 				}
 			}
+			//console.log("piece placed");
+			bool = 0;
 			let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
 			playerPiece.piece = Object.values(PIECES)[pIdx][0];
 			playerPiece.pieceIdx = 0;
@@ -412,6 +444,7 @@ function movePlayerDown(playerPiece){
 			playerPiece.x = 4;
 			playerPiece.y = b.HEIGHT - 1;
 			score += 1;
+			//console.log("new piece created");
 			let badPieceCounter = 0;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -603,8 +636,10 @@ document.onkeydown = function (e) {
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key == ' '){
 		//console.log("here");
-		let p = hold(playerPiece,holdPiece);
+		let p = hold(bool);
 		
+	} else if (e.key ==='s'){
+		next_five();
 	}
 };
 
