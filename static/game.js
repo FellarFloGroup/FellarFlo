@@ -150,6 +150,7 @@ let playerPiece = {
 	pieceStr: "rightZ",
 	pieceIdx: 0
 };
+let holdPiece = 'rightZ';
 
 var socket = io();
 socket.on('connect', () => {
@@ -295,7 +296,6 @@ function clearRow(board, i){
 }
 
 function changePlayerPiece(playerPiece, pieceStr){
-	playerPiece.piece = PIECES[pieceStr];
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
 		for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 			if(!playerPiece.piece.piece[i][j].isEmpty()){
@@ -355,8 +355,23 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 	}
 }
 
-let framesUntilPlace = 2;
+function setPlayerPiece(pieceStr){
+	playerPiece = {piece: PIECES[pieceStr][0],
+		x: 4,
+		y: b.HEIGHT - 1,
+		pieceStr: pieceStr,
+		pieceIdx: 0};
+}
 
+function hold(){
+	const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
+	console.log(newHoldPiece);
+	setPlayerPiece(holdPiece);
+	holdPiece = newHoldPiece;
+}
+
+
+let framesUntilPlace = 2;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
 function movePlayerDown(playerPiece){
 	let change = 1;
@@ -583,6 +598,10 @@ document.onkeydown = function (e) {
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd'){
 		rotatePlayerPiece(playerPiece, 'right');
+	} else if(e.key == ' '){
+		//console.log("here");
+		let p = hold(playerPiece,holdPiece);
+		
 	}
 };
 
