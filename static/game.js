@@ -370,6 +370,9 @@ function hold(){
 	holdPiece = newHoldPiece;
 }
 
+var img = document.createElement('img');
+img.src = "C:/Users/ishita/Desktop/Blox/my_image.jpg";
+document.body.appendChild(img);
 
 let framesUntilPlace = 2;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
