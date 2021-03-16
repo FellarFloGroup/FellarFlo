@@ -4,6 +4,13 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
+    <script>
+      const loadImgs = ['red.png', 'blue.png', 'cyan.png', 'gray.png', 'green.png', 'orange.png', 'purple.png', 'teal.png'];
+      loadImgs.forEach(img => {
+        const image = new Image();
+        image.src = `https://www.evan.umasscreate.net/pixels/${img}`;
+      });
+    </script>
   </body>
   <script src="/static/game.js"></script>
 </html>
