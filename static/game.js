@@ -153,6 +153,7 @@ let playerPiece = {
 	pieceStr: "rightZ",
 	pieceIdx: 0
 };
+setPlayerPiece(playerQueue('pop'));
 let holdPiece = '';
 
 var socket = io();
@@ -632,8 +633,6 @@ document.onkeydown = function (e) {
 			hold();
 			canSwap = false;
 		}
-	} else if (e.key ==='s'){
-		playerQueue();
 	}
 };
 
