@@ -361,11 +361,14 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 }
 
 function setPlayerPiece(pieceStr){
+	//console.log("here");
 	playerPiece = {piece: PIECES[pieceStr][0],
 		x: 4,
 		y: b.HEIGHT - 1,
 		pieceStr: pieceStr,
 		pieceIdx: 0};
+
+	console.log(playerPiece.pieceStr);
 }
 
 function hold(){
@@ -386,18 +389,14 @@ function create_new_piece(){
 function next_five(action){
 	if (action == 'add'){
 		n = queue.length;
-		console.log(n);
 		for(let i = n ; i < 5 ; i++){
 			let pieceToBeAdded = create_new_piece();
-			//console.log(pieceToBeAdded);
-			queue[i] = pieceToBeAdded;
+			queue.push(pieceToBeAdded);
+			console.log(queue);
 		}
-		console.log(n)
+		
 	}else if(action == 'pop'){
-		return queue[0];
-	}
-	for(let j = 0 ; j < n ; j++){
-		console.log(queue[j]);
+		return queue.shift();
 	}
 }
 //var img = document.createElement('img');
@@ -437,12 +436,16 @@ function movePlayerDown(playerPiece){
 			}
 			//console.log("piece placed");
 			bool = 0;
-			let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
+			let nextPiece = next_five('pop');
+			console.log(nextPiece);
+			setPlayerPiece(nextPiece);
+			//next_five('add');
+			/*let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
 			playerPiece.piece = Object.values(PIECES)[pIdx][0];
 			playerPiece.pieceIdx = 0;
 			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
 			playerPiece.x = 4;
-			playerPiece.y = b.HEIGHT - 1;
+			playerPiece.y = b.HEIGHT - 1;*/
 			score += 1;
 			//console.log("new piece created");
 			let badPieceCounter = 0;
@@ -454,13 +457,19 @@ function movePlayerDown(playerPiece){
 								badPieceCounter += 1;
 							}
 						}
+						//console.log(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT);
+						console.log(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty());
+						console.log(playerPiece.piece.centerX);
 						if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+							
+							
 							badPieceCounter += 1;
 						}
 					}
 				}
 			}
 			if(badPieceCounter >= 1){
+				console.log(badPieceCounter);
 				for(let i = 0; i < playerPiece.piece.piece.length; i++){
 					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 						while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
