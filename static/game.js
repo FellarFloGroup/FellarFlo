@@ -214,7 +214,7 @@ for(let i = 0; i < b.HEIGHT; i++){
     cell.style.width = 25;
     cell.style.height = 25;
     cell.style.padding = 0;
-    cell.style.backgroundColor = `rgb(${(255 * (i / b.HEIGHT))},0,${(255 * (j / b.WIDTH))})`;
+    cell.style.backgroundColor = `gray`;
     row.appendChild(cell);
     const img = document.createElement('img');
     img.id = `img${i},${j}`;
@@ -223,7 +223,7 @@ for(let i = 0; i < b.HEIGHT; i++){
     img.style.padding = 0;
     img.style.width = '100%';
     img.style.height = '100%';
-    img.src = '';//https://www.evan.umasscreate.net/pixels/red.png';
+    img.src = 'https://www.evan.umasscreate.net/pixels/gray.png';
     cell.appendChild(img);
   }
 }
@@ -243,7 +243,7 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
-			document.getElementById(`tablecell${board.HEIGHT - (i + 1)},${j}`).style.backgroundColor = board.board[i][j].color();
+			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).src = `https://www.evan.umasscreate.net/pixels/${board.board[i][j].color()}.png`;
 		}
 	}
 
@@ -258,7 +258,7 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 					if(yPos < 0 || yPos >= b.HEIGHT){
 						continue;
 					}
-					document.getElementById(`tablecell${board.HEIGHT  - (yPos+1)},${xPos}`).style.backgroundColor = playerPiece.piece.piece[i][j].color();
+					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
 				}
 			}
 		}
