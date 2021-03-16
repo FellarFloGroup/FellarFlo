@@ -142,20 +142,18 @@ const PIECES = {
 };
 let b = new Board();
 let score = 0;
-let bool = 0;
+let canSwap = true;
 const totalPieces = ["leftL", "rightL", "square", "line", "T", "leftZ", "rightZ"];
 let queue = [];
-next_five('add');
+playerQueue('add');
 let playerPiece = {
 	piece: PIECES['rightZ'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
 	pieceStr: "rightZ",
 	pieceIdx: 0
-	//isHold : false;
 };
-let holdPiece = 'rightZ';
-let tempPiece = '';
+let holdPiece = '';
 
 var socket = io();
 socket.on('connect', () => {
@@ -361,47 +359,43 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 }
 
 function setPlayerPiece(pieceStr){
-	//console.log("here");
-	playerPiece = {piece: PIECES[pieceStr][0],
-		x: 4,
-		y: b.HEIGHT - 1,
-		pieceStr: pieceStr,
-		pieceIdx: 0};
 
-	console.log(playerPiece.pieceStr);
+	console.log(pieceStr);
+	playerPiece.piece = PIECES[pieceStr][0];
+	playerPiece.x = 4;
+	playerPiece.y = b.HEIGHT - 1;
+	playerPiece.pieceStr = pieceStr;
+	playerPiece.pieceIdx = 0;
 }
 
 function hold(){
-	if (bool == 0){
+	if(holdPiece.length === 0){
+		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
+		setPlayerPiece(playerQueue('pop'));
+		holdPiece = newHoldPiece;
+	} else {
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
 		setPlayerPiece(holdPiece);
 		holdPiece = newHoldPiece;
-		bool = 1;
 	}
 }
 
-function create_new_piece(){
-	let pIdx = Math.floor(Math.random() * Object.keys(totalPieces).length);
-	let newPiece = totalPieces[pIdx];
-	return newPiece
+function getNewPieceStr(){
+	return Object.keys(PIECES)[Math.floor(Math.random() * Object.keys(PIECES).length)];
 }
 
-function next_five(action){
-	if (action == 'add'){
-		n = queue.length;
-		for(let i = n ; i < 5 ; i++){
-			let pieceToBeAdded = create_new_piece();
-			queue.push(pieceToBeAdded);
-			console.log(queue);
+function playerQueue(action){
+	if(action == 'add'){
+		for(let i = queue.length; i < 5; i++){
+			queue.push(getNewPieceStr());
 		}
-		
-	}else if(action == 'pop'){
-		return queue.shift();
+	} else if(action == 'pop'){
+		let out = queue.shift();
+		playerQueue('add');
+		console.log(out);
+		return out;
 	}
 }
-//var img = document.createElement('img');
-//img.src = 'https://media.geeksforgeeks.org/wp-content/uploads/20190529122828/bs21.png';
-//document.body.appendChild(img);
 
 let framesUntilPlace = 2;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
@@ -435,19 +429,9 @@ function movePlayerDown(playerPiece){
 				}
 			}
 			//console.log("piece placed");
-			bool = 0;
-			let nextPiece = next_five('pop');
-			console.log(nextPiece);
-			setPlayerPiece(nextPiece);
-			//next_five('add');
-			/*let pIdx = Math.floor(Math.random() * Object.keys(PIECES).length);
-			playerPiece.piece = Object.values(PIECES)[pIdx][0];
-			playerPiece.pieceIdx = 0;
-			playerPiece.pieceStr = Object.keys(PIECES)[pIdx];
-			playerPiece.x = 4;
-			playerPiece.y = b.HEIGHT - 1;*/
+			canSwap = true;
+			setPlayerPiece(playerQueue('pop'));
 			score += 1;
-			//console.log("new piece created");
 			let badPieceCounter = 0;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -563,8 +547,6 @@ function lose(){
   			scoreTd.innerHTML = data[i][1]
   			row.appendChild(scoreTd);
   		}
-
-  		// loseText.innerHTML += `${leaderboardText}</font>`;
   	});
 }
 
@@ -644,11 +626,12 @@ document.onkeydown = function (e) {
 	} else if(e.key === 'd'){
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key == ' '){
-		//console.log("here");
-		let p = hold(bool);
-		
+		if(canSwap){
+			hold();
+			canSwap = false;
+		}
 	} else if (e.key ==='s'){
-		next_five();
+		playerQueue();
 	}
 };
 
@@ -661,8 +644,7 @@ if(isMobile){
 	let yDown = null;
 
 	function getTouches(evt) {
-	  return evt.touches ||             // browser API
-	         evt.originalEvent.touches;
+	  return evt.touches ||  evt.originalEvent.touches;
 	}
 
 	function handleTouchStart(evt) {
@@ -682,8 +664,8 @@ if(isMobile){
 	    let xDiff = xDown - xUp;
 	    let yDiff = yDown - yUp;
 
-	    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-	        if ( xDiff > 0 ) {
+	    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+	        if (xDiff > 0) {
 	            /* left swipe */
 	            move('left');
 	        } else {
@@ -691,7 +673,7 @@ if(isMobile){
 	            move('right');
 	        }
 	    } else {
-	        if ( yDiff > 0 ) {
+	        if (yDiff > 0) {
 	            /* up swipe */
 	        } else {
 	            move('down');
