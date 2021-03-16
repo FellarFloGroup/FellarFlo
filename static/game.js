@@ -157,7 +157,7 @@ let holdPiece = '';
 
 var socket = io();
 socket.on('connect', () => {
-	console.log(socket.id);
+	// console.log(socket.id);
 });
 
 
@@ -213,8 +213,18 @@ for(let i = 0; i < b.HEIGHT; i++){
 	cell.id = `tablecell${i},${j}`;
     cell.style.width = 25;
     cell.style.height = 25;
+    cell.style.padding = 0;
     cell.style.backgroundColor = `rgb(${(255 * (i / b.HEIGHT))},0,${(255 * (j / b.WIDTH))})`;
     row.appendChild(cell);
+    const img = document.createElement('img');
+    img.id = `img${i},${j}`;
+    img.style.left = 0;
+    img.style.top = 0;
+    img.style.padding = 0;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.src = '';//https://www.evan.umasscreate.net/pixels/red.png';
+    cell.appendChild(img);
   }
 }
 middleSection.appendChild(table);
@@ -359,8 +369,6 @@ function rotatePlayerPiece(playerPiece, dir="right"){
 }
 
 function setPlayerPiece(pieceStr){
-
-	console.log(pieceStr);
 	playerPiece.piece = PIECES[pieceStr][0];
 	playerPiece.x = 4;
 	playerPiece.y = b.HEIGHT - 1;
@@ -392,7 +400,6 @@ function playerQueue(action){
 	} else if(action == 'pop'){
 		let out = queue.shift();
 		playerQueue('add');
-		console.log(out);
 		return out;
 	}
 }
@@ -407,7 +414,7 @@ function movePlayerDown(playerPiece){
 				if(playerPiece.y-(change)-i-playerPiece.piece.centerY >= 0 && b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY]===undefined){
 					continue;
 				}
-				while(playerPiece.y-(change)-i-playerPiece.piece.centerY < 0 || !b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+				while(playerPiece.y-(change)-i-playerPiece.piece.centerY < 0 || playerPiece.y-(change)-i-playerPiece.piece.centerY >= b.HEIGHT || !b.board[playerPiece.y-(change)-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
 					change -= 1;
 				}
 			}
@@ -428,9 +435,10 @@ function movePlayerDown(playerPiece){
 					}
 				}
 			}
-			//console.log("piece placed");
+
 			canSwap = true;
 			setPlayerPiece(playerQueue('pop'));
+
 			score += 1;
 			let badPieceCounter = 0;
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
@@ -441,19 +449,13 @@ function movePlayerDown(playerPiece){
 								badPieceCounter += 1;
 							}
 						}
-						//console.log(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT);
-						console.log(!b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty());
-						console.log(playerPiece.piece.centerX);
 						if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-							
-							
 							badPieceCounter += 1;
 						}
 					}
 				}
 			}
 			if(badPieceCounter >= 1){
-				console.log(badPieceCounter);
 				for(let i = 0; i < playerPiece.piece.piece.length; i++){
 					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 						while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
