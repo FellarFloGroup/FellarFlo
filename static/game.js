@@ -87,13 +87,13 @@ class Board{
 
 const SPEED_DOWNWARDS = 200;
 const PIECES_IMG = {
-	"leftL": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fd%2Fde%2FPearl_Winter_White_Russian_Dwarf_Hamster_-_Front.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHamster&tbnid=rSodfVFOfsie0M&vet=12ahUKEwiy1NjI9LLvAhVHZN8KHXIYCdIQMygAegUIARCwAQ..i&docid=lIUkuH03JLTovM&w=2052&h=1128&q=hamster%20pics&ved=2ahUKEwiy1NjI9LLvAhVHZN8KHXIYCdIQMygAegUIARCwAQ",
-	"rightL": "rightL.png",
-	"square": "square.png",
-	"line": "line.png",
-	"T": "T.png",
-	"leftZ": "leftZ.png",
-	"rightZ": "rightZ.png"
+	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
+	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
+	"square": "https://evan.umasscreate.net/pieces/square.png",
+	"line": "https://evan.umasscreate.net/pieces/line.png",
+	"T": "https://evan.umasscreate.net/pieces/T.png",
+	"leftZ": "https://evan.umasscreate.net/pieces/leftZ.png",
+	"rightZ": "https://evan.umasscreate.net/pieces/rightZ.png"
 };
 const PIECES = {
 	"leftL": [
@@ -143,7 +143,6 @@ const PIECES = {
 let b = new Board();
 let score = 0;
 let canSwap = true;
-const totalPieces = ["leftL", "rightL", "square", "line", "T", "leftZ", "rightZ"];
 let queue = [];
 playerQueue('add');
 let playerPiece = {
@@ -190,13 +189,33 @@ rightSection.style.width = '33%';
 rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
+
+//display for held piece
+const holdPieceLabel = document.createElement('h2');
+holdPieceLabel.innerHTML = "Hold";
+holdPieceLabel.style.color = 'white';
+holdPieceLabel.align = 'right';
+holdPieceLabel.style.fontSize = 35;
+holdPieceLabel.style.paddingRight = '40px';
+holdPieceLabel.style.paddingBottom = 0;
+holdPieceLabel.style.marginBottom = 0;
+leftSection.appendChild(holdPieceLabel);
+const holdPieceDisplay = document.createElement('img');
+holdPieceDisplay.style.width = '150px';
+holdPieceDisplay.style.border = '5px inset gray';
+holdPieceDisplay.style.height = '150px';
+holdPieceDisplay.style.position = 'relative';
+holdPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
+holdPieceDisplay.align = 'right';
+leftSection.appendChild(holdPieceDisplay);
+
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
 scoreLabel.style.color = 'white';
 scoreLabel.style.marginLeft = 'auto';
 scoreLabel.style.marginRight = 'auto';
 scoreLabel.style.textAlign = 'center';
-scoreLabel.innerHTML = 'Score: 0pts'
+scoreLabel.innerHTML = 'Score: 0pts';
 middleSection.appendChild(scoreLabel);
 
 //Making tetris board
@@ -236,6 +255,11 @@ function updateScoreVisual(score){
 		scoreLabel.innerHTML = `Score: 1 pt`;
 	} else {
 		scoreLabel.innerHTML = `Score: ${score} pts`;
+	}
+}
+function updateHoldPieceVisual(){
+	if(holdPiece.length != 0){
+		holdPieceDisplay.src = PIECES_IMG[holdPiece];
 	}
 }
 
@@ -490,6 +514,16 @@ function lose(){
 	dimDiv.style.width = "34%";
 	dimDiv.style.height = "100%";
 	middleSection.appendChild(dimDiv);
+	const dimDiv2 = document.createElement('div');
+	dimDiv2.style.opacity = 0.5;
+	dimDiv2.style.position = "fixed";
+	dimDiv2.style.marginLeft = 'auto';
+	dimDiv2.style.marginRight = 'auto';
+	dimDiv2.style.top = "0px";
+	dimDiv2.style.backgroundColor = "black";
+	dimDiv2.style.width = "33%";
+	dimDiv2.style.height = "100%";
+	leftSection.appendChild(dimDiv2);
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
@@ -631,6 +665,7 @@ document.onkeydown = function (e) {
 	} else if(e.key == ' '){
 		if(canSwap){
 			hold();
+			updateHoldPieceVisual();
 			canSwap = false;
 		}
 	}
