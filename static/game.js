@@ -209,6 +209,10 @@ holdPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
 holdPieceDisplay.align = 'right';
 leftSection.appendChild(holdPieceDisplay);
 
+
+const displayQueueArray = createQueueArray([]);
+
+
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
 scoreLabel.style.color = 'white';
@@ -249,6 +253,14 @@ for(let i = 0; i < b.HEIGHT; i++){
 }
 middleSection.appendChild(table);
 
+function createQueueArray(array){
+	for(let i = 0 ; i < 5 ; i++){
+		var newImage = document.createElement('img');
+		array.push(newImage);
+	}
+	//console.log(array)
+	return array;
+}
 
 function updateScoreVisual(score){
 	if(score === 1){
@@ -257,12 +269,27 @@ function updateScoreVisual(score){
 		scoreLabel.innerHTML = `Score: ${score} pts`;
 	}
 }
+
 function updateHoldPieceVisual(){
 	if(holdPiece.length != 0){
 		holdPieceDisplay.src = PIECES_IMG[holdPiece];
 	}
 }
 
+function updateQueueVisual(){
+	for(let i = 0 ; i < queue.length; i++){
+		let queueElement = displayQueueArray[i];
+		queueElement.style.width = '100px';
+		queueElement.style.height = '100px';
+		queueElement.style.position = 'relative';
+		queueElement.align = 'left';
+		rightSection.appendChild(queueElement);
+		queueElement.src = PIECES_IMG[queue[i]];
+		console.log([queue[i]]);
+		console.log(queueElement.src);
+	}
+
+}
 //updateVisuals(board: Board): void
 function updateVisuals(board, playerPiece, showPlayerPiece=true){
 	//draws board
@@ -405,6 +432,7 @@ function hold(){
 	if(holdPiece.length === 0){
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
 		setPlayerPiece(playerQueue('pop'));
+		updateQueueVisual();
 		holdPiece = newHoldPiece;
 	} else {
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
@@ -463,6 +491,7 @@ function movePlayerDown(playerPiece){
 
 			canSwap = true;
 			setPlayerPiece(playerQueue('pop'));
+			updateQueueVisual();
 
 			score += 1;
 			let badPieceCounter = 0;
