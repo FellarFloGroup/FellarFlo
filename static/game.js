@@ -190,11 +190,27 @@ rightSection.style.width = '33%';
 rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
+const queueLabel = document.createElement('h2');
+queueLabel.innerHTML = "Queue";
+queueLabel.style.color = 'white';
+queueLabel.align = 'left';
+queueLabel.style.fontSize = 35;
+queueLabel.style.paddingLeft = '15px';
+queueLabel.style.paddingBottom = 0;
+queueLabel.style.marginBottom = 0;
+queueLabel.style.marginTop = '70px';
+rightSection.appendChild(queueLabel);
 
 
-const displayQueueArray = createQueueArray([]);
+const queueBorder = document.createElement('div');
+queueBorder.style.border = '5px inset grey';
+queueBorder.style.width = '120px';
+queueBorder.style.height = '500px';
+queueBorder.left = '0';
+queueBorder.style.marginTop = '0px';
+rightSection.appendChild(queueBorder);
+const displayQueueArray = createQueueArray();
 updateQueueVisual();
-
 
 //display for held piece
 const holdPieceLabel = document.createElement('h2');
@@ -214,7 +230,6 @@ holdPieceDisplay.style.position = 'relative';
 holdPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
 holdPieceDisplay.align = 'right';
 leftSection.appendChild(holdPieceDisplay);
-
 
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
@@ -258,14 +273,16 @@ middleSection.appendChild(table);
 
 
 
-function createQueueArray(array){
+function createQueueArray(){
+	let array = [];
 	for(let i = 0 ; i < 5 ; i++){
 		let newImage = document.createElement('img');
 		newImage.style.width = '100px';
 		newImage.style.height = '100px';
-		rightSection.appendChild(newImage);
+		newImage.style.paddingLeft = '10px';
+		queueBorder.appendChild(newImage);
 		let lb = document.createElement('br');
-		rightSection.appendChild(lb);
+		queueBorder.appendChild(lb);
 		array.push(newImage);
 	}
 	return array;
@@ -286,8 +303,6 @@ function updateHoldPieceVisual(){
 }
 
 function updateQueueVisual(){
-	let heightFromTop = -260;
-	let distanceFromLeft = -70;
 	for(let i = 0 ; i < queue.length; i++){
 		let queueElement = displayQueueArray[i];
 		queueElement.src = PIECES_IMG[queue[i]];
@@ -558,6 +573,16 @@ function lose(){
 	dimDiv2.style.width = "33%";
 	dimDiv2.style.height = "100%";
 	leftSection.appendChild(dimDiv2);
+	const dimDiv3 = document.createElement('div');
+	dimDiv3.style.opacity = 0.5;
+	dimDiv3.style.position = "fixed";
+	dimDiv3.style.marginLeft = 'auto';
+	dimDiv3.style.marginRight = 'auto';
+	dimDiv3.style.top = "0px";
+	dimDiv3.style.backgroundColor = "black";
+	dimDiv3.style.width = "33%";
+	dimDiv3.style.height = "100%";
+	rightSection.appendChild(dimDiv3);
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
