@@ -593,20 +593,28 @@ function lose(){
   		rightSection.appendChild(leaderboardTable);
   		const leaderboardBody = document.createElement("tbody");
   		const titleRow = document.createElement('tr');
+  		titleRow.style.backgroundColor = 'darkgray';
+  		titleRow.style.color = 'black'
   		leaderboardBody.appendChild(titleRow);
   		const rankTitle = document.createElement("td");
-  		rankTitle.style.minWidth = "100px";
+  		rankTitle.style.minWidth = "10px";
   		titleRow.appendChild(rankTitle);
   		const nameTitle = document.createElement("td");
-  		nameTitle.innerHTML = "Name";
+  		nameTitle.innerHTML = "<strong>Name</strong>";
   		titleRow.appendChild(nameTitle);
   		const scoreTitle = document.createElement("td");
-  		scoreTitle.innerHTML = "Score";
+  		scoreTitle.innerHTML = "<strong>Score</strong>";
   		titleRow.appendChild(scoreTitle);
 
   		leaderboardTable.appendChild(leaderboardBody);
   		for(let i = 0; i < data.length; i++){
   			const row = document.createElement('tr');
+  			row.style.color = 'black';
+  			if(i % 2 === 0){
+  				row.style.backgroundColor = 'gray';
+  			} else {
+  				row.style.backgroundColor = 'lightgray';
+  			}
   			leaderboardBody.appendChild(row);
   			const rankingTd = document.createElement('td');
   			rankingTd.innerHTML = `${i + 1}.`;
