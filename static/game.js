@@ -143,8 +143,7 @@ const PIECES = {
 let b = new Board();
 let score = 0;
 let canSwap = true;
-let queue = [];
-playerQueue('add');
+
 let playerPiece = {
 	piece: PIECES['rightZ'][0],
 	x: 4,
@@ -152,6 +151,8 @@ let playerPiece = {
 	pieceStr: "rightZ",
 	pieceIdx: 0
 };
+let queue = [];
+playerQueue('add');
 setPlayerPiece(playerQueue('pop'));
 let holdPiece = '';
 
@@ -190,6 +191,11 @@ rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
 
+
+const displayQueueArray = createQueueArray([]);
+updateQueueVisual();
+
+
 //display for held piece
 const holdPieceLabel = document.createElement('h2');
 holdPieceLabel.innerHTML = "Hold";
@@ -208,9 +214,6 @@ holdPieceDisplay.style.position = 'relative';
 holdPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
 holdPieceDisplay.align = 'right';
 leftSection.appendChild(holdPieceDisplay);
-
-
-const displayQueueArray = createQueueArray([]);
 
 
 //Making tetris score label
@@ -253,9 +256,13 @@ for(let i = 0; i < b.HEIGHT; i++){
 }
 middleSection.appendChild(table);
 
+
+
 function createQueueArray(array){
 	for(let i = 0 ; i < 5 ; i++){
 		var newImage = document.createElement('img');
+		//queueElement.style.width = '100px';
+		//queueElement.style.height = '100px';
 		array.push(newImage);
 	}
 	//console.log(array)
@@ -277,16 +284,23 @@ function updateHoldPieceVisual(){
 }
 
 function updateQueueVisual(){
+	let heightFromTop = -260;
+	let distanceFromLeft = -70;
 	for(let i = 0 ; i < queue.length; i++){
 		let queueElement = displayQueueArray[i];
+		heightFromTop += 100
+		distanceFromLeft += 105;
+		let stringHeightFromTop = heightFromTop.toString().concat('px');
+		let stringdistanceFromLeft = distanceFromLeft.toString().concat('px');
 		queueElement.style.width = '100px';
 		queueElement.style.height = '100px';
+		queueElement.style.top = stringHeightFromTop;
+		queueElement.style.right = stringdistanceFromLeft;
 		queueElement.style.position = 'relative';
-		queueElement.align = 'left';
+		queueElement.align = 'rights';
 		rightSection.appendChild(queueElement);
 		queueElement.src = PIECES_IMG[queue[i]];
-		console.log([queue[i]]);
-		console.log(queueElement.src);
+		
 	}
 
 }
