@@ -260,12 +260,14 @@ middleSection.appendChild(table);
 
 function createQueueArray(array){
 	for(let i = 0 ; i < 5 ; i++){
-		var newImage = document.createElement('img');
-		//queueElement.style.width = '100px';
-		//queueElement.style.height = '100px';
+		let newImage = document.createElement('img');
+		newImage.style.width = '100px';
+		newImage.style.height = '100px';
+		rightSection.appendChild(newImage);
+		let lb = document.createElement('br');
+		rightSection.appendChild(lb);
 		array.push(newImage);
 	}
-	//console.log(array)
 	return array;
 }
 
@@ -288,17 +290,6 @@ function updateQueueVisual(){
 	let distanceFromLeft = -70;
 	for(let i = 0 ; i < queue.length; i++){
 		let queueElement = displayQueueArray[i];
-		heightFromTop += 100
-		distanceFromLeft += 105;
-		let stringHeightFromTop = heightFromTop.toString().concat('px');
-		let stringdistanceFromLeft = distanceFromLeft.toString().concat('px');
-		queueElement.style.width = '100px';
-		queueElement.style.height = '100px';
-		queueElement.style.top = stringHeightFromTop;
-		queueElement.style.right = stringdistanceFromLeft;
-		queueElement.style.position = 'relative';
-		queueElement.align = 'rights';
-		rightSection.appendChild(queueElement);
 		queueElement.src = PIECES_IMG[queue[i]];
 		
 	}
