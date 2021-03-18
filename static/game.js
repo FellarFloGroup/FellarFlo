@@ -85,7 +85,7 @@ class Board{
 	}
 }
 
-const SPEED_DOWNWARDS = 400;
+const SPEED_DOWNWARDS = 200;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
@@ -429,7 +429,7 @@ function playerQueue(action){
 	}
 }
 
-let framesUntilPlace = 2;
+let framesUntilPlace = 1;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
 function movePlayerDown(playerPiece){
 	let change = 1;
@@ -494,14 +494,13 @@ function movePlayerDown(playerPiece){
 			framesUntilPlace--;
 		}
 	} else {
-		framesUntilPlace = 2;
+		framesUntilPlace = 1;
 	}
 	return false;
 }
 
 function lose(){
 	clearInterval(gameInterval);
-	clearInterval(visualInterval);
 	document.onkeydown = e => {};
 	updateVisuals(b, playerPiece);
 	const dimDiv = document.createElement('div');
@@ -587,11 +586,6 @@ function lose(){
   	});
 }
 
-let visualInterval = setInterval(() => {
-	updateVisuals(b, playerPiece);
-	updateScoreVisual(score);
-}, 150);
-
 let gameInterval = setInterval(() => {
 	if(movePlayerDown(playerPiece)){
 		lose();
@@ -607,6 +601,8 @@ let gameInterval = setInterval(() => {
 		}
 	}
 	score += rowsCleared * rowsCleared;
+	updateVisuals(b, playerPiece);
+	updateScoreVisual(score);
 }, SPEED_DOWNWARDS);
 
 function move(str){
@@ -669,6 +665,7 @@ document.onkeydown = function (e) {
 			canSwap = false;
 		}
 	}
+	updateVisuals(b, playerPiece);
 };
 
 if(isMobile){
@@ -717,6 +714,8 @@ if(isMobile){
 	    }
 	    /* reset values */
 	    xDown = null;
-	    yDown = null;                                             
+	    yDown = null;  
+
+		updateVisuals(b, playerPiece);                                           
 	};
 }
