@@ -143,8 +143,7 @@ const PIECES = {
 let b = new Board();
 let score = 0;
 let canSwap = true;
-let queue = [];
-playerQueue('add');
+
 let playerPiece = {
 	piece: PIECES['rightZ'][0],
 	x: 4,
@@ -152,6 +151,8 @@ let playerPiece = {
 	pieceStr: "rightZ",
 	pieceIdx: 0
 };
+let queue = [];
+playerQueue('add');
 setPlayerPiece(playerQueue('pop'));
 let holdPiece = '';
 
@@ -189,6 +190,27 @@ rightSection.style.width = '33%';
 rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
+const queueLabel = document.createElement('h2');
+queueLabel.innerHTML = "Queue";
+queueLabel.style.color = 'white';
+queueLabel.align = 'left';
+queueLabel.style.fontSize = 35;
+queueLabel.style.paddingLeft = '15px';
+queueLabel.style.paddingBottom = 0;
+queueLabel.style.marginBottom = 0;
+queueLabel.style.marginTop = '70px';
+rightSection.appendChild(queueLabel);
+
+
+const queueBorder = document.createElement('div');
+queueBorder.style.border = '5px inset grey';
+queueBorder.style.width = '120px';
+queueBorder.style.height = '500px';
+queueBorder.left = '0';
+queueBorder.style.marginTop = '0px';
+rightSection.appendChild(queueBorder);
+const displayQueueArray = createQueueArray();
+updateQueueVisual();
 
 //display for held piece
 const holdPieceLabel = document.createElement('h2');
@@ -251,6 +273,22 @@ for(let i = 0; i < b.HEIGHT; i++){
 middleSection.appendChild(table);
 
 
+
+function createQueueArray(){
+	let array = [];
+	for(let i = 0 ; i < 5 ; i++){
+		let newImage = document.createElement('img');
+		newImage.style.width = '100px';
+		newImage.style.height = '100px';
+		newImage.style.paddingLeft = '10px';
+		queueBorder.appendChild(newImage);
+		let lb = document.createElement('br');
+		queueBorder.appendChild(lb);
+		array.push(newImage);
+	}
+	return array;
+}
+
 function updateScoreVisual(score){
 	if(score === 1){
 		scoreLabel.innerHTML = `Score: 1 pt`;
@@ -258,12 +296,21 @@ function updateScoreVisual(score){
 		scoreLabel.innerHTML = `Score: ${score} pts`;
 	}
 }
+
 function updateHoldPieceVisual(){
 	if(holdPiece.length != 0){
 		holdPieceDisplay.src = PIECES_IMG[holdPiece];
 	}
 }
 
+function updateQueueVisual(){
+	for(let i = 0 ; i < queue.length; i++){
+		let queueElement = displayQueueArray[i];
+		queueElement.src = PIECES_IMG[queue[i]];
+		
+	}
+
+}
 //updateVisuals(board: Board): void
 function updateVisuals(board, playerPiece, showPlayerPiece=true){
 	//draws board
@@ -406,6 +453,7 @@ function hold(){
 	if(holdPiece.length === 0){
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
 		setPlayerPiece(playerQueue('pop'));
+		updateQueueVisual();
 		holdPiece = newHoldPiece;
 	} else {
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
@@ -464,6 +512,7 @@ function movePlayerDown(playerPiece){
 
 			canSwap = true;
 			setPlayerPiece(playerQueue('pop'));
+			updateQueueVisual();
 
 			score += 1;
 			let badPieceCounter = 0;
@@ -524,6 +573,16 @@ function lose(){
 	dimDiv2.style.width = "33%";
 	dimDiv2.style.height = "100%";
 	leftSection.appendChild(dimDiv2);
+	const dimDiv3 = document.createElement('div');
+	dimDiv3.style.opacity = 0.5;
+	dimDiv3.style.position = "fixed";
+	dimDiv3.style.marginLeft = 'auto';
+	dimDiv3.style.marginRight = 'auto';
+	dimDiv3.style.top = "0px";
+	dimDiv3.style.backgroundColor = "black";
+	dimDiv3.style.width = "33%";
+	dimDiv3.style.height = "100%";
+	rightSection.appendChild(dimDiv3);
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
@@ -559,20 +618,28 @@ function lose(){
   		rightSection.appendChild(leaderboardTable);
   		const leaderboardBody = document.createElement("tbody");
   		const titleRow = document.createElement('tr');
+  		titleRow.style.backgroundColor = 'darkgray';
+  		titleRow.style.color = 'black'
   		leaderboardBody.appendChild(titleRow);
   		const rankTitle = document.createElement("td");
-  		rankTitle.style.minWidth = "100px";
+  		rankTitle.style.minWidth = "10px";
   		titleRow.appendChild(rankTitle);
   		const nameTitle = document.createElement("td");
-  		nameTitle.innerHTML = "Name";
+  		nameTitle.innerHTML = "<strong>Name</strong>";
   		titleRow.appendChild(nameTitle);
   		const scoreTitle = document.createElement("td");
-  		scoreTitle.innerHTML = "Score";
+  		scoreTitle.innerHTML = "<strong>Score</strong>";
   		titleRow.appendChild(scoreTitle);
 
   		leaderboardTable.appendChild(leaderboardBody);
   		for(let i = 0; i < data.length; i++){
   			const row = document.createElement('tr');
+  			row.style.color = 'black';
+  			if(i % 2 === 0){
+  				row.style.backgroundColor = 'gray';
+  			} else {
+  				row.style.backgroundColor = 'lightgray';
+  			}
   			leaderboardBody.appendChild(row);
   			const rankingTd = document.createElement('td');
   			rankingTd.innerHTML = `${i + 1}.`;
