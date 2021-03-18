@@ -223,6 +223,7 @@ const table = document.createElement("table");
 table.style.marginTop = '5%';
 table.style.marginLeft = 'auto';
 table.style.marginRight = 'auto';
+table.style.border = ' 8px inset gray';
 const tableBody = document.createElement("tbody");
 table.appendChild(tableBody);
 for(let i = 0; i < b.HEIGHT; i++){
