@@ -85,7 +85,7 @@ class Board{
 	}
 }
 
-const SPEED_DOWNWARDS = 200;
+const SPEED_DOWNWARDS = 400;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
@@ -590,7 +590,7 @@ function lose(){
 let visualInterval = setInterval(() => {
 	updateVisuals(b, playerPiece);
 	updateScoreVisual(score);
-}, 50);
+}, 150);
 
 let gameInterval = setInterval(() => {
 	if(movePlayerDown(playerPiece)){
