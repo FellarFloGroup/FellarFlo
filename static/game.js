@@ -761,27 +761,57 @@ function move(str){
 	}
 }
 
+function quickDrop(){
+	let keepGoing = true;
+	while(keepGoing){
+		playerPiece.y -= 1;
+		for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+					let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+					if(yPos < 0){
+						keepGoing = false;
+						break;
+					}
+					if(yPos >= b.HEIGHT){
+						continue;
+					}
+					if(!b.board[yPos][xPos].isEmpty()){
+						keepGoing = false;
+					}
+				}
+			}
+		}
+		if(!keepGoing){
+			playerPiece.y += 1;
+		}
+	}
+}
+
 document.onkeydown = function (e) {
     e = e || window.event;
 	// use e.keyCode
-    if (e.keyCode == '40') {
+    if (e.key === 'ArrowDown') {
 		move("down");
-    } else if (e.keyCode == '37') {
+    } else if (e.key === 'ArrowLeft') {
 		move("left");
-    } else if (e.keyCode == '39') {
+    } else if (e.key === 'ArrowRight') {
 		move("right");
+	} else if(e.key === 'ArrowUp'){
+		quickDrop();
 	} else if(e.key === 'a'){
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd'){
 		rotatePlayerPiece(playerPiece, 'right');
-	} else if(e.key == ' '){
+	} else if(e.key === ' '){
 		if(canSwap){
 			hold();
 			updateHoldPieceVisual();
 			canSwap = false;
 		}
 	}
-	updateVisuals(b, playerPiece);
+	setTimeout(() => updateVisuals(b, playerPiece), 0);
 };
 
 if(isMobile){
