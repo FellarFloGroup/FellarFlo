@@ -312,17 +312,63 @@ function updateQueueVisual(){
 
 }
 //updateVisuals(board: Board): void
-function updateVisuals(board, playerPiece, showPlayerPiece=true){
+function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayerPiece=true){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
 			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).src = `https://www.evan.umasscreate.net/pixels/${board.board[i][j].color()}.png`;
+			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
 		}
 	}
 
+
 	//draws playerPiece
 	if(showPlayerPiece){
-		
+
+		//draw ghost piece
+		if(showGhostPlayerPiece){
+			let ghostHeight = playerPiece.y;
+			let keepGoing = true;
+			while(keepGoing){
+				ghostHeight -= 1;
+				for(let i = 0; i < playerPiece.piece.piece.length; i++){
+					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+						if(!playerPiece.piece.piece[i][j].isEmpty()){
+							let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+							let yPos = ghostHeight-i-playerPiece.piece.centerY;
+							if(yPos < 0){
+								keepGoing = false;
+								break;
+							}
+							if(yPos >= b.HEIGHT){
+								continue;
+							}
+							if(!board.board[yPos][xPos].isEmpty()){
+								keepGoing = false;
+							}
+						}
+					}
+				}
+				if(!keepGoing){
+					ghostHeight += 1;
+				}
+			}
+			for(let i = 0; i < playerPiece.piece.piece.length; i++){
+				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+						let yPos = ghostHeight-i-playerPiece.piece.centerY;
+						if(yPos < 0 || yPos >= b.HEIGHT){
+							continue;
+						}
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 0.25;
+					}
+				}
+			}
+		}
+
+		//draw player piece
 		for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
@@ -332,11 +378,13 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 						continue;
 					}
 					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 1;
+
 				}
 			}
 		}
+		
 	}
-	// document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -586,13 +634,13 @@ function lose(){
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
-	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 50px;'>${score} points</font>`;
 	loseText.style.margin = "auto";
 	loseText.style.zIndex = "1000";
 	loseText.style.width = "100%";
 	loseText.style.textAlign = "center";
 	loseText.style.fontSize = "150px";
-	loseText.style.top = table.style.top.substring(0,-2) + 250;
+	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
   	socket.emit('leaderboard', score);
@@ -610,16 +658,18 @@ function lose(){
 			}
   		}
   		const leaderboardTable = document.createElement("table");
-  		leaderboardTable.style.position = 'fixed';
-  		leaderboardTable.style.bottom = "0px";
-  		leaderboardTable.style.left = '67%'; 
+  		leaderboardTable.style.position = 'relative';
+  		leaderboardTable.style.top = 400;
+  		leaderboardTable.style.marginLeft = 'auto';
+  		leaderboardTable.style.marginRight = 'auto'; 
   		leaderboardTable.style.border = '10px groove gray';
-  		leaderboardTable.style.color = 'white';
-  		rightSection.appendChild(leaderboardTable);
+  		leaderboardTable.style.color = 'black';
+  		leaderboardTable.style.zIndex = "5000";
+  		leaderboardTable.style.backgroundColor = 'black';
+  		document.body.appendChild(leaderboardTable);
   		const leaderboardBody = document.createElement("tbody");
   		const titleRow = document.createElement('tr');
   		titleRow.style.backgroundColor = 'darkgray';
-  		titleRow.style.color = 'black'
   		leaderboardBody.appendChild(titleRow);
   		const rankTitle = document.createElement("td");
   		rankTitle.style.minWidth = "10px";
@@ -713,27 +763,57 @@ function move(str){
 	}
 }
 
+function quickDrop(){
+	let keepGoing = true;
+	while(keepGoing){
+		playerPiece.y -= 1;
+		for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+					let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+					if(yPos < 0){
+						keepGoing = false;
+						break;
+					}
+					if(yPos >= b.HEIGHT){
+						continue;
+					}
+					if(!b.board[yPos][xPos].isEmpty()){
+						keepGoing = false;
+					}
+				}
+			}
+		}
+		if(!keepGoing){
+			playerPiece.y += 1;
+		}
+	}
+}
+
 document.onkeydown = function (e) {
     e = e || window.event;
 	// use e.keyCode
-    if (e.keyCode == '40') {
+    if (e.key === 'ArrowDown') {
 		move("down");
-    } else if (e.keyCode == '37') {
+    } else if (e.key === 'ArrowLeft') {
 		move("left");
-    } else if (e.keyCode == '39') {
+    } else if (e.key === 'ArrowRight') {
 		move("right");
+	} else if(e.key === 'ArrowUp'){
+		quickDrop();
 	} else if(e.key === 'a'){
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd'){
 		rotatePlayerPiece(playerPiece, 'right');
-	} else if(e.key == ' '){
+	} else if(e.key === ' '){
 		if(canSwap){
 			hold();
 			updateHoldPieceVisual();
 			canSwap = false;
 		}
 	}
-	updateVisuals(b, playerPiece);
+	setTimeout(() => updateVisuals(b, playerPiece), 0);
 };
 
 if(isMobile){
