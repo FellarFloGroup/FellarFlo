@@ -322,11 +322,8 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 	}
 
 
-
 	//draws playerPiece
 	if(showPlayerPiece){
-		
-
 
 		//draw ghost piece
 		if(showGhostPlayerPiece){
@@ -349,7 +346,6 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 							if(!board.board[yPos][xPos].isEmpty()){
 								keepGoing = false;
 							}
-							// document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
 						}
 					}
 				}
@@ -372,7 +368,7 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 			}
 		}
 
-		
+		//draw player piece
 		for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
@@ -389,7 +385,6 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 		}
 		
 	}
-	// document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
