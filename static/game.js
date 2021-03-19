@@ -85,7 +85,7 @@ class Board{
 	}
 }
 
-const SPEED_DOWNWARDS = 200;
+const SPEED_DOWNWARDS = 250;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
