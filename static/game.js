@@ -634,13 +634,13 @@ function lose(){
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
-	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 50px;'>${score} points</font>`;
 	loseText.style.margin = "auto";
 	loseText.style.zIndex = "1000";
 	loseText.style.width = "100%";
 	loseText.style.textAlign = "center";
 	loseText.style.fontSize = "150px";
-	loseText.style.top = table.style.top.substring(0,-2) + 250;
+	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
   	socket.emit('leaderboard', score);
@@ -658,16 +658,18 @@ function lose(){
 			}
   		}
   		const leaderboardTable = document.createElement("table");
-  		leaderboardTable.style.position = 'fixed';
-  		leaderboardTable.style.bottom = "0px";
-  		leaderboardTable.style.left = '67%'; 
+  		leaderboardTable.style.position = 'relative';
+  		leaderboardTable.style.top = 400;
+  		leaderboardTable.style.marginLeft = 'auto';
+  		leaderboardTable.style.marginRight = 'auto'; 
   		leaderboardTable.style.border = '10px groove gray';
-  		leaderboardTable.style.color = 'white';
-  		rightSection.appendChild(leaderboardTable);
+  		leaderboardTable.style.color = 'black';
+  		leaderboardTable.style.zIndex = "5000";
+  		leaderboardTable.style.backgroundColor = 'black';
+  		document.body.appendChild(leaderboardTable);
   		const leaderboardBody = document.createElement("tbody");
   		const titleRow = document.createElement('tr');
   		titleRow.style.backgroundColor = 'darkgray';
-  		titleRow.style.color = 'black'
   		leaderboardBody.appendChild(titleRow);
   		const rankTitle = document.createElement("td");
   		rankTitle.style.minWidth = "10px";
