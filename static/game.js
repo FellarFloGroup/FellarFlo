@@ -312,16 +312,66 @@ function updateQueueVisual(){
 
 }
 //updateVisuals(board: Board): void
-function updateVisuals(board, playerPiece, showPlayerPiece=true){
+function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayerPiece=true){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
 			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).src = `https://www.evan.umasscreate.net/pixels/${board.board[i][j].color()}.png`;
+			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
 		}
 	}
 
+
+
 	//draws playerPiece
 	if(showPlayerPiece){
+		
+
+
+		//draw ghost piece
+		if(showGhostPlayerPiece){
+			let ghostHeight = playerPiece.y;
+			let keepGoing = true;
+			while(keepGoing){
+				ghostHeight -= 1;
+				for(let i = 0; i < playerPiece.piece.piece.length; i++){
+					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+						if(!playerPiece.piece.piece[i][j].isEmpty()){
+							let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+							let yPos = ghostHeight-i-playerPiece.piece.centerY;
+							if(yPos < 0){
+								keepGoing = false;
+								break;
+							}
+							if(yPos >= b.HEIGHT){
+								continue;
+							}
+							if(!board.board[yPos][xPos].isEmpty()){
+								keepGoing = false;
+							}
+							// document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+						}
+					}
+				}
+				if(!keepGoing){
+					ghostHeight += 1;
+				}
+			}
+			for(let i = 0; i < playerPiece.piece.piece.length; i++){
+				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+						let yPos = ghostHeight-i-playerPiece.piece.centerY;
+						if(yPos < 0 || yPos >= b.HEIGHT){
+							continue;
+						}
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 0.25;
+					}
+				}
+			}
+		}
+
 		
 		for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -332,9 +382,12 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 						continue;
 					}
 					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 1;
+
 				}
 			}
 		}
+		
 	}
 	// document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
