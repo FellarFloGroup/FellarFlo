@@ -655,9 +655,9 @@ document.onkeydown = function (e) {
 		move("left");
     } else if (e.keyCode == '39') {
 		move("right");
-	} else if(e.key === 'a'){
+	} else if(e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
-	} else if(e.key === 'd'){
+	} else if(e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key == ' '){
 		if(canSwap){
