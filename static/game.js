@@ -85,7 +85,7 @@ class Board{
 	}
 }
 
-const SPEED_DOWNWARDS = 200;
+const SPEED_DOWNWARDS = 250;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
@@ -143,8 +143,7 @@ const PIECES = {
 let b = new Board();
 let score = 0;
 let canSwap = true;
-let queue = [];
-playerQueue('add');
+
 let playerPiece = {
 	piece: PIECES['rightZ'][0],
 	x: 4,
@@ -152,6 +151,8 @@ let playerPiece = {
 	pieceStr: "rightZ",
 	pieceIdx: 0
 };
+let queue = [];
+playerQueue('add');
 setPlayerPiece(playerQueue('pop'));
 let holdPiece = '';
 
@@ -189,6 +190,27 @@ rightSection.style.width = '33%';
 rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
+const queueLabel = document.createElement('h2');
+queueLabel.innerHTML = "Queue";
+queueLabel.style.color = 'white';
+queueLabel.align = 'left';
+queueLabel.style.fontSize = 35;
+queueLabel.style.paddingLeft = '15px';
+queueLabel.style.paddingBottom = 0;
+queueLabel.style.marginBottom = 0;
+queueLabel.style.marginTop = '70px';
+rightSection.appendChild(queueLabel);
+
+
+const queueBorder = document.createElement('div');
+queueBorder.style.border = '5px inset grey';
+queueBorder.style.width = '120px';
+queueBorder.style.height = '500px';
+queueBorder.left = '0';
+queueBorder.style.marginTop = '0px';
+rightSection.appendChild(queueBorder);
+const displayQueueArray = createQueueArray();
+updateQueueVisual();
 
 //display for held piece
 const holdPieceLabel = document.createElement('h2');
@@ -251,6 +273,22 @@ for(let i = 0; i < b.HEIGHT; i++){
 middleSection.appendChild(table);
 
 
+
+function createQueueArray(){
+	let array = [];
+	for(let i = 0 ; i < 5 ; i++){
+		let newImage = document.createElement('img');
+		newImage.style.width = '100px';
+		newImage.style.height = '100px';
+		newImage.style.paddingLeft = '10px';
+		queueBorder.appendChild(newImage);
+		let lb = document.createElement('br');
+		queueBorder.appendChild(lb);
+		array.push(newImage);
+	}
+	return array;
+}
+
 function updateScoreVisual(score){
 	if(score === 1){
 		scoreLabel.innerHTML = `Score: 1 pt`;
@@ -258,24 +296,79 @@ function updateScoreVisual(score){
 		scoreLabel.innerHTML = `Score: ${score} pts`;
 	}
 }
+
 function updateHoldPieceVisual(){
 	if(holdPiece.length != 0){
 		holdPieceDisplay.src = PIECES_IMG[holdPiece];
 	}
 }
 
+function updateQueueVisual(){
+	for(let i = 0 ; i < queue.length; i++){
+		let queueElement = displayQueueArray[i];
+		queueElement.src = PIECES_IMG[queue[i]];
+		
+	}
+
+}
 //updateVisuals(board: Board): void
-function updateVisuals(board, playerPiece, showPlayerPiece=true){
+function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayerPiece=true){
 	//draws board
 	for(let i = 0; i < board.HEIGHT; i++){
 		for(let j = 0; j < board.WIDTH; j++){
 			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).src = `https://www.evan.umasscreate.net/pixels/${board.board[i][j].color()}.png`;
+			document.getElementById(`img${board.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
 		}
 	}
 
+
 	//draws playerPiece
 	if(showPlayerPiece){
-		
+
+		//draw ghost piece
+		if(showGhostPlayerPiece){
+			let ghostHeight = playerPiece.y;
+			let keepGoing = true;
+			while(keepGoing){
+				ghostHeight -= 1;
+				for(let i = 0; i < playerPiece.piece.piece.length; i++){
+					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+						if(!playerPiece.piece.piece[i][j].isEmpty()){
+							let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+							let yPos = ghostHeight-i-playerPiece.piece.centerY;
+							if(yPos < 0){
+								keepGoing = false;
+								break;
+							}
+							if(yPos >= b.HEIGHT){
+								continue;
+							}
+							if(!board.board[yPos][xPos].isEmpty()){
+								keepGoing = false;
+							}
+						}
+					}
+				}
+				if(!keepGoing){
+					ghostHeight += 1;
+				}
+			}
+			for(let i = 0; i < playerPiece.piece.piece.length; i++){
+				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+					if(!playerPiece.piece.piece[i][j].isEmpty()){
+						let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+						let yPos = ghostHeight-i-playerPiece.piece.centerY;
+						if(yPos < 0 || yPos >= b.HEIGHT){
+							continue;
+						}
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 0.25;
+					}
+				}
+			}
+		}
+
+		//draw player piece
 		for(let i = 0; i < playerPiece.piece.piece.length; i++){
 			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 				if(!playerPiece.piece.piece[i][j].isEmpty()){
@@ -285,11 +378,13 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true){
 						continue;
 					}
 					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
+					document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 1;
+
 				}
 			}
 		}
+		
 	}
-	// document.getElementById(`tablecell${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).style.backgroundColor = 'darkgreen';
 }
 
 //moveDown(board: Board, emptyIdx: int): void
@@ -406,6 +501,7 @@ function hold(){
 	if(holdPiece.length === 0){
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
 		setPlayerPiece(playerQueue('pop'));
+		updateQueueVisual();
 		holdPiece = newHoldPiece;
 	} else {
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
@@ -464,6 +560,7 @@ function movePlayerDown(playerPiece){
 
 			canSwap = true;
 			setPlayerPiece(playerQueue('pop'));
+			updateQueueVisual();
 
 			score += 1;
 			let badPieceCounter = 0;
@@ -524,16 +621,26 @@ function lose(){
 	dimDiv2.style.width = "33%";
 	dimDiv2.style.height = "100%";
 	leftSection.appendChild(dimDiv2);
+	const dimDiv3 = document.createElement('div');
+	dimDiv3.style.opacity = 0.5;
+	dimDiv3.style.position = "fixed";
+	dimDiv3.style.marginLeft = 'auto';
+	dimDiv3.style.marginRight = 'auto';
+	dimDiv3.style.top = "0px";
+	dimDiv3.style.backgroundColor = "black";
+	dimDiv3.style.width = "33%";
+	dimDiv3.style.height = "100%";
+	rightSection.appendChild(dimDiv3);
 	const loseText = document.createElement("h1");
 	loseText.style.color = "white";
 	loseText.style.position = "fixed";
-	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 30px;'>${score} points</font>`;
+	loseText.innerHTML = `<font style='color: Crimson'>Game Over</font><br><font style='font-size: 50px;'>${score} points</font>`;
 	loseText.style.margin = "auto";
 	loseText.style.zIndex = "1000";
 	loseText.style.width = "100%";
 	loseText.style.textAlign = "center";
 	loseText.style.fontSize = "150px";
-	loseText.style.top = table.style.top.substring(0,-2) + 250;
+	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
   	socket.emit('leaderboard', score);
@@ -551,28 +658,38 @@ function lose(){
 			}
   		}
   		const leaderboardTable = document.createElement("table");
-  		leaderboardTable.style.position = 'fixed';
-  		leaderboardTable.style.bottom = "0px";
-  		leaderboardTable.style.left = '67%'; 
+  		leaderboardTable.style.position = 'relative';
+  		leaderboardTable.style.top = 400;
+  		leaderboardTable.style.marginLeft = 'auto';
+  		leaderboardTable.style.marginRight = 'auto'; 
   		leaderboardTable.style.border = '10px groove gray';
-  		leaderboardTable.style.color = 'white';
-  		rightSection.appendChild(leaderboardTable);
+  		leaderboardTable.style.color = 'black';
+  		leaderboardTable.style.zIndex = "5000";
+  		leaderboardTable.style.backgroundColor = 'black';
+  		document.body.appendChild(leaderboardTable);
   		const leaderboardBody = document.createElement("tbody");
   		const titleRow = document.createElement('tr');
+  		titleRow.style.backgroundColor = 'darkgray';
   		leaderboardBody.appendChild(titleRow);
   		const rankTitle = document.createElement("td");
-  		rankTitle.style.minWidth = "100px";
+  		rankTitle.style.minWidth = "10px";
   		titleRow.appendChild(rankTitle);
   		const nameTitle = document.createElement("td");
-  		nameTitle.innerHTML = "Name";
+  		nameTitle.innerHTML = "<strong>Name</strong>";
   		titleRow.appendChild(nameTitle);
   		const scoreTitle = document.createElement("td");
-  		scoreTitle.innerHTML = "Score";
+  		scoreTitle.innerHTML = "<strong>Score</strong>";
   		titleRow.appendChild(scoreTitle);
 
   		leaderboardTable.appendChild(leaderboardBody);
   		for(let i = 0; i < data.length; i++){
   			const row = document.createElement('tr');
+  			row.style.color = 'black';
+  			if(i % 2 === 0){
+  				row.style.backgroundColor = 'gray';
+  			} else {
+  				row.style.backgroundColor = 'lightgray';
+  			}
   			leaderboardBody.appendChild(row);
   			const rankingTd = document.createElement('td');
   			rankingTd.innerHTML = `${i + 1}.`;
@@ -646,27 +763,57 @@ function move(str){
 	}
 }
 
+function quickDrop(){
+	let keepGoing = true;
+	while(keepGoing){
+		playerPiece.y -= 1;
+		for(let i = 0; i < playerPiece.piece.piece.length; i++){
+			for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+				if(!playerPiece.piece.piece[i][j].isEmpty()){
+					let xPos = playerPiece.x-j-playerPiece.piece.centerX;
+					let yPos = playerPiece.y-i-playerPiece.piece.centerY;
+					if(yPos < 0){
+						keepGoing = false;
+						break;
+					}
+					if(yPos >= b.HEIGHT){
+						continue;
+					}
+					if(!b.board[yPos][xPos].isEmpty()){
+						keepGoing = false;
+					}
+				}
+			}
+		}
+		if(!keepGoing){
+			playerPiece.y += 1;
+		}
+	}
+}
+
 document.onkeydown = function (e) {
-    e = e || window.event;
+  e = e || window.event;
 	// use e.keyCode
-    if (e.keyCode == '40') {
+  if (e.key === 'ArrowDown') {
 		move("down");
-    } else if (e.keyCode == '37') {
+  } else if (e.key === 'ArrowLeft') {
 		move("left");
-    } else if (e.keyCode == '39') {
+  } else if (e.key === 'ArrowRight') {
 		move("right");
+  } else if(e.key === 'ArrowUp'){
+		quickDrop();
 	} else if(e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
-	} else if(e.key == ' '){
+	} else if(e.key === ' '){
 		if(canSwap){
 			hold();
 			updateHoldPieceVisual();
 			canSwap = false;
 		}
 	}
-	updateVisuals(b, playerPiece);
+	setTimeout(() => updateVisuals(b, playerPiece), 0);
 };
 
 if(isMobile){
