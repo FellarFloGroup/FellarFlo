@@ -792,19 +792,19 @@ function quickDrop(){
 }
 
 document.onkeydown = function (e) {
-    e = e || window.event;
+  e = e || window.event;
 	// use e.keyCode
-    if (e.key === 'ArrowDown') {
+  if (e.key === 'ArrowDown') {
 		move("down");
-    } else if (e.key === 'ArrowLeft') {
+  } else if (e.key === 'ArrowLeft') {
 		move("left");
-    } else if (e.key === 'ArrowRight') {
+  } else if (e.key === 'ArrowRight') {
 		move("right");
-	} else if(e.key === 'ArrowUp'){
+  } else if(e.key === 'ArrowUp'){
 		quickDrop();
-	} else if(e.key === 'a'){
+	} else if(e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
-	} else if(e.key === 'd'){
+	} else if(e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key === ' '){
 		if(canSwap){
