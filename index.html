@@ -1,17 +1,44 @@
 <html>
-  <head>
-    <title>Fellar Flo</title>
-    <script src="/socket.io/socket.io.js"></script>
-  </head>
-  <body>
-  	
-    <script>
-      const loadImgs = ['red.png', 'blue.png', 'cyan.png', 'gray.png', 'green.png', 'orange.png', 'purple.png', 'teal.png'];
-      loadImgs.forEach(img => {
-        const image = new Image();
-        image.src = `https://www.evan.umasscreate.net/pixels/${img}`;
-      });
-    </script>
-  </body>
-  <script src="/static/game.js"></script>
+<head>
+</head>
+
+<style type="text/css">
+	a{
+		color: red;
+		text-decoration: none;
+	}	
+</style>
+
+<script type="text/javascript">
+	function brighten(obj){
+		obj.style.opacity = 0.9;
+		obj.style.filter = "blur(1px)";
+		obj.style.webkitFilter = 'blur(1px)';
+	}
+	function dim(obj){
+		obj.style.opacity = 0.75;
+		obj.style.filter = "blur(2px)";
+		obj.style.webkitFilter = 'blur(2px)';
+	}
+	function redirect(location){
+		window.location.href = location;
+	}
+</script>
+<body style="background-color: black;">
+	<div id="One Player" onclick="redirect('/OnePlayerGame')" style="background-image: url(https://www.evan.umasscreate.net/home_screen/OnePlayerGame.png); background-size: 100% 100%; filter: blur(2px);  -webkit-filter: blur(2px); position: relative; height: 400px; width: 600px; display: block; margin-right: auto; margin-left: auto; border: 5px inset gray; opacity: 0.75; top: 25%; cursor: pointer;" onmouseenter="brighten(this);" onmouseleave="dim(this)">
+		<h1 style="font-size: 100px; color: white; filter: blur(0px); text-shadow: -2px -2px 0 #00F, 2px -2px 0 #00F, -2px 2px 0 #00F, 2px 2px 0 #00F; -webkit-filter: blur(0px); text-align: center; vertical-align: center;">One Player</h1>
+	</div>
+
+	<div style="position: fixed; bottom: 0px; width: 100%; left: 0px;">
+		<h3 style="color: white; text-align: center;">
+			 Developed by: <a href="http://www.evanfellman.com" target="_blank">Evan Fellman</a>, Ishita Kumar, David Florez
+		</h3>
+	</div>
+
+	<div style="position: fixed; top: 0px; width: 100%; left: 0px;">
+		<h1 style="color: white; text-align: center; font-size: 150px; margin-top: 0px;">
+			 FellarFlo
+		</h1>
+	</div>
+</body>
 </html>

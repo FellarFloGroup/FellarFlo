@@ -27,7 +27,11 @@ app.use('/static', express.static(__dirname + '/static'));
 
 // Routing
 app.get('/', function(request, response) {
-  response.sendFile(path.join(__dirname, 'index.html'));
+	response.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/OnePlayerGame', function(request, response){
+	response.sendFile(path.join(__dirname, 'OnePlayerGame.html'));
 });
 
 // Starts the server.
@@ -70,9 +74,9 @@ io.on('connection', function(socket) {
 });
 
 
-setInterval(function() {
-  io.sockets.emit('message', 'Baa');
-}, 1000);
+// setInterval(function() {
+//   io.sockets.emit('message', 'Baa');
+// }, 1000);
 
 
 // const app = http.createServer((request, response) => {
