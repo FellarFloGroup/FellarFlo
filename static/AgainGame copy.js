@@ -1,7 +1,7 @@
 let isMobile = false; //initiate as false
 // device detection
-if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
-    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) {
+if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
+    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) { 
     isMobile = true;
 }
 
@@ -54,7 +54,7 @@ class Board{
 				});
 				i++;
 			});
-
+			
 		}
 	}
 	toString(){
@@ -307,7 +307,7 @@ function updateQueueVisual(){
 	for(let i = 0 ; i < queue.length; i++){
 		let queueElement = displayQueueArray[i];
 		queueElement.src = PIECES_IMG[queue[i]];
-
+		
 	}
 
 }
@@ -383,7 +383,7 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 				}
 			}
 		}
-
+		
 	}
 }
 
@@ -399,7 +399,7 @@ function moveDown(board, emptyIdx){
 	for(let i = 0; i < board.WIDTH; i++){
 		board.board[board.HEIGHT - 1][i] = {isEmpty: () => true, color: () => 'gray'};
 	}
-	board.highestPiece -= 1;
+	board.highestPiece -= 1; 
 }
 
 //checkEmpty(board: Board, i: int): bool
@@ -601,7 +601,7 @@ function lose(){
 	clearInterval(gameInterval);
 	document.onkeydown = e => {};
 	updateVisuals(b, playerPiece);
-
+	
 	const dimDiv = document.createElement('div');
 	dimDiv.id = "dimDiv";
 	//needed^^ for deletion at replay
@@ -611,10 +611,35 @@ function lose(){
 	dimDiv.style.marginRight = 'auto';
 	dimDiv.style.top = "0px";
 	dimDiv.style.backgroundColor = "black";
-	dimDiv.style.width = "100%";
+	dimDiv.style.width = "34%";
 	dimDiv.style.height = "100%";
-	leftSection.appendChild(dimDiv);
+	middleSection.appendChild(dimDiv);
 
+	const dimDiv2 = document.createElement('div');
+	dimDiv2.id = "dimDiv2";
+	//needed^^ for deletion at replay
+	dimDiv2.style.opacity = 0.5;
+	dimDiv2.style.position = "fixed";
+	dimDiv2.style.marginLeft = 'auto';
+	dimDiv2.style.marginRight = 'auto';
+	dimDiv2.style.top = "0px";
+	dimDiv2.style.backgroundColor = "black";
+	dimDiv2.style.width = "33%";
+	dimDiv2.style.height = "100%";
+	leftSection.appendChild(dimDiv2);
+
+	const dimDiv3 = document.createElement('div');
+	dimDiv3.id = "dimDiv3";
+	//needed^^ for deletion at replay
+	dimDiv3.style.opacity = 0.5;
+	dimDiv3.style.position = "fixed";
+	dimDiv3.style.marginLeft = 'auto';
+	dimDiv3.style.marginRight = 'auto';
+	dimDiv3.style.top = "0px";
+	dimDiv3.style.backgroundColor = "black";
+	dimDiv3.style.width = "33%";
+	dimDiv3.style.height = "100%";
+	rightSection.appendChild(dimDiv3);
 
 	const loseText = document.createElement("h1");
 	loseText.id = "loseText";
@@ -650,7 +675,7 @@ function lose(){
   		leaderboardTable.style.position = 'relative';
   		leaderboardTable.style.top = 400;
   		leaderboardTable.style.marginLeft = 'auto';
-  		leaderboardTable.style.marginRight = 'auto';
+  		leaderboardTable.style.marginRight = 'auto'; 
   		leaderboardTable.style.border = '10px groove gray';
   		leaderboardTable.style.color = 'black';
   		leaderboardTable.style.zIndex = '5000';
@@ -702,7 +727,7 @@ function lose(){
   		playAgainButton.style.textAlign = 'center';
   		playAgainButton.style.fontSize= '20px'
   		playAgainButton.style.marginLeft = 'auto';
-  		playAgainButton.style.marginRight = 'auto';
+  		playAgainButton.style.marginRight = 'auto'; 
   		playAgainButton.style.width = "100px"
   		//notify user that this is a button upon mouseover
   		playAgainButton.style.cursor = 'pointer';
@@ -723,6 +748,8 @@ function playAgain(){
 	updateVisuals(b, playerPiece);
 	//time to delete the end game graphics
 	document.getElementById("dimDiv").remove();
+	document.getElementById("dimDiv2").remove();
+	document.getElementById("dimDiv3").remove();
 	document.getElementById("loseText").remove();
 	document.body.removeChild(document.getElementById("leaderboardTable"));
 	document.body.removeChild(document.getElementById("playAgainButton"));
@@ -730,7 +757,7 @@ function playAgain(){
 	document.onkeydown = enableOnKeyDown;
 	scoreLabel.style.display = "initial";
 	gameInterval = setInterval(gameIntervalFunction, SPEED_DOWNWARDS);
-
+  	
 
 }
 
@@ -853,10 +880,10 @@ document.onkeydown = enableOnKeyDown;
 
 if(isMobile){
 	document.addEventListener('click', (e) => rotatePlayerPiece(playerPiece, 'right'), false);
-	document.addEventListener('touchstart', handleTouchStart, false);
+	document.addEventListener('touchstart', handleTouchStart, false);        
 	document.addEventListener('touchmove', handleTouchMove, false);
 
-	let xDown = null;
+	let xDown = null;                                                        
 	let yDown = null;
 
 	function getTouches(evt) {
@@ -897,8 +924,8 @@ if(isMobile){
 	    }
 	    /* reset values */
 	    xDown = null;
-	    yDown = null;
+	    yDown = null;  
 
-		updateVisuals(b, playerPiece);
+		updateVisuals(b, playerPiece);                                           
 	};
 }
