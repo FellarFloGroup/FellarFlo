@@ -28,3 +28,6 @@ ITEMS REMAINING FROM TETRIS:
 - "The subsequent consolidation of the playing pieces remaining on the playing \
 field as a result of the downward shift into the space vacated by the disappearing line."
 - "The downward, lateral and rotating movements of the playing pieces;"
+
+Source:
+https://www.gamasutra.com/view/news/113761/Exclusive_Tetris_Legal_Clone_War_Versus_Blockles.php
