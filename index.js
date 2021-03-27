@@ -4,6 +4,7 @@ let http = require('http');
 let path = require('path');
 let socketIO = require('socket.io');
 let fs = require('fs');
+let writeSafe = true;
 
 let app = express();
 let server = http.Server(app);
@@ -19,7 +20,6 @@ fs.readFile("leaderboard.ranking", function(error, contents) {
 			}
 		}
 	});
-	console.log(leaderboard);
 });
 
 app.set('port', 0);
@@ -54,8 +54,18 @@ io.on('connection', function(socket) {
 		io.sockets.to(clientId).emit("leaderboardSend", leaderboard, idx);
 		socket.on('leaderboardname', function(name){
 			if(name === '' || name === 'null'){
+				//we don't take empty names
 				return;
 			} else {
+				while (!writeSafe){1+1}
+				writeSafe = false;
+			    //avoiding race condition (only one client writing to master leaderboard at a time)
+				const contents = fs.readFileSync("leaderboard.ranking");
+				leaderboard = contents.split('\n').map(e => {
+					//cut leaderboard into names and scores (a-#)
+					let t = e.split('-');
+					return [t[0],parseInt(t[1])];
+				});
 				for(let j = leaderboard.length - 1; j > idx; j--){
 					leaderboard[j] = leaderboard[j-1];
 				}
@@ -68,6 +78,7 @@ io.on('connection', function(socket) {
 					}
 				}
 				fs.writeFile('leaderboard.ranking', fileStr, () => {});
+				writeSafe = true;
 			}
 		});
 	});
