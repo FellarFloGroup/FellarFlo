@@ -630,8 +630,12 @@ function lose(){
 	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
-  	socket.emit('leaderboard', score);
-  	socket.on('leaderboard', (data, rank) => {
+  	socket.emit('leaderboardScore', score);
+
+}
+
+socket.on('leaderboardSend', (data, rank) => {
+  		console.log(socket.id);
   		if(rank >= 0){
 			let name = prompt("Please enter your name", "");
 			socket.emit('leaderboardname', name);
@@ -644,7 +648,7 @@ function lose(){
 				data[rank] = [name, score];
 			}
   		}
-  		const leaderboardTable = document.createElement("table");
+  		let leaderboardTable = document.createElement("table");
   		leaderboardTable.id = 'leaderboardTable';
   		//needed^^ for deletion at replay
   		leaderboardTable.style.position = 'relative';
@@ -710,7 +714,6 @@ function lose(){
   		playAgainButton.onclick = playAgain;
 
   	});
-}
 
 function playAgain(){
 	//restarting everything
