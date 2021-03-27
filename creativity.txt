@@ -23,6 +23,21 @@ piece not chosen stays), the bottom row has lost a corner on both sides thus mak
 an octagon, powerups: bomb, shake to left/right removing gaps, outline of where piece\
 will fall
 
+SHAPES:
+
+XXXX
+   X
+   
+   X
+XXXX
+
+ X 
+XXX
+ X
+ 
+ XXX
+ 
+
 ITEMS REMAINING FROM TETRIS:
 - "The disappearance of any completed horizontal line;"
 - "The subsequent consolidation of the playing pieces remaining on the playing \
