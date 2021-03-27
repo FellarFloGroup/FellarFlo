@@ -698,16 +698,17 @@ socket.on('leaderboardSend', (data, rank) => {
   		const playAgainButton = document.createElement('div');
   		playAgainButton.id = 'playAgainButton';
   		//needed^^ for deletion at replay
-  		playAgainButton.innerHTML = 'Play Again';
-  		playAgainButton.style.backgroundColor = 'white';
-  		playAgainButton.style.color = 'red';
+  		playAgainButton.innerHTML = 'PLAY AGAIN  &#8634';
+  		playAgainButton.style.backgroundColor = "rgb(0,120,45)";
+  		playAgainButton.style.color = 'white';
   		playAgainButton.style.top = 430;
   		playAgainButton.style.position = 'relative';
   		playAgainButton.style.textAlign = 'center';
-  		playAgainButton.style.fontSize= '20px'
+  		playAgainButton.style.border = '5px solid rgb(0,89,33)';
+  		playAgainButton.style.fontSize= '80px';
+  		playAgainButton.style.width = "60%";
   		playAgainButton.style.marginLeft = 'auto';
   		playAgainButton.style.marginRight = 'auto';
-  		playAgainButton.style.width = "100px"
   		//notify user that this is a button upon mouseover
   		playAgainButton.style.cursor = 'pointer';
   		document.body.appendChild(playAgainButton);
