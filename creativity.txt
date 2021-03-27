@@ -1,0 +1,30 @@
+copyright is a thing that is important
+
+The elements Tetris has detailed as its distinctive trade dress are:
+
+- "Geometric playing pieces formed by four equally-sized, delineated blocks;"
+- "The long vertical rectangle playing field, which is higher than wide;"
+- "The downward, lateral and rotating movements of the playing pieces;"
+- "The appearance of a shadow piece at the bottom of the playing field \
+matrix to indicate where the Tetrimino will drop;"
+- "The appearance of a trailer effect after the Tetrimino during a 'hard \
+drop' command;"
+- "The display of the next Tetrimino that will fall down the matrix in a \
+small box next to the playing field;"
+- "The disappearance of any completed horizontal line;"
+- "The display of a flash effect when a completed horizontal line disappears;" and
+- "The subsequent consolidation of the playing pieces remaining on the playing \
+field as a result of the downward shift into the space vacated by the disappearing line."
+
+IDEAS:
+
+5 block pieces, no hold, no next piece, two piece choices at the top (pick via arrow,\
+piece not chosen stays), the bottom row has lost a corner on both sides thus making it\
+an octagon, powerups: bomb, shake to left/right removing gaps, outline of where piece\
+will fall
+
+ITEMS REMAINING FROM TETRIS:
+- "The disappearance of any completed horizontal line;"
+- "The subsequent consolidation of the playing pieces remaining on the playing \
+field as a result of the downward shift into the space vacated by the disappearing line."
+- "The downward, lateral and rotating movements of the playing pieces;"
