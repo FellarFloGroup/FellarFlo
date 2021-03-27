@@ -635,7 +635,6 @@ function lose(){
 }
 
 socket.on('leaderboardSend', (data, rank) => {
-  		console.log(socket.id);
   		if(rank >= 0){
 			let name = prompt("Please enter your name", "");
 			socket.emit('leaderboardname', name);
