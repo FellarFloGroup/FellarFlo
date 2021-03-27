@@ -42,7 +42,7 @@ server.listen(0, function() {
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
 	const clientId = socket.id;
-	socket.on('leaderboard', function(score) {
+	socket.on('leaderboardScore', function(score) {
 		let idx = -1;
 		for(let i = 0; i < leaderboard.length; i++){
 			if(score > leaderboard[i][1]){
@@ -51,7 +51,7 @@ io.on('connection', function(socket) {
 				break;
 			}
 		}
-		io.sockets.to(clientId).emit("leaderboard", leaderboard, idx);
+		io.sockets.to(clientId).emit("leaderboardSend", leaderboard, idx);
 		socket.on('leaderboardname', function(name){
 			if(name === '' || name === 'null'){
 				return;
