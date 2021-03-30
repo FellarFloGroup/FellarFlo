@@ -122,21 +122,21 @@ const PIECES = {
 			{piece:[[new Pixel(),new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple'),new Pixel('purple')], [new Pixel(),new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 		],	
 	"thumbLeft": [
-			{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel()]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: 1, centerY: -1},
+			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange'), new Pixel('orange')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange'), new Pixel('orange')]], centerX: 0, centerY: -1},
 		],
 	"thumbRight": [
 			{piece:[[new Pixel('pink'), new Pixel()], [new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')], [new Pixel(), new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')], [new Pixel(), new Pixel('pink')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('pink'), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel()]], centerX: -1, centerY: -1},
 		],
-	"line": [
+	"line5": [
 			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
-			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2},
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
 			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2}
 		],
 	"line3": [
@@ -152,8 +152,8 @@ const PIECES = {
 			{piece:[[new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 		],
 	"Plus": [
-			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
 		],
