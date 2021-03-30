@@ -89,42 +89,49 @@ const SPEED_DOWNWARDS = 250;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
-	"square": "https://evan.umasscreate.net/pieces/square.png",
+	"thumbLeft": "https://evan.umasscreate.net/pieces/square.png",
+	"thumbRight": "https://evan.umasscreate.net/pieces/square.png",
 	"line": "https://evan.umasscreate.net/pieces/line.png",
-	"T": "https://evan.umasscreate.net/pieces/T.png",
+	"Plus": "https://evan.umasscreate.net/pieces/T.png",
 	"leftZ": "https://evan.umasscreate.net/pieces/leftZ.png",
 	"rightZ": "https://evan.umasscreate.net/pieces/rightZ.png"
 };
 const PIECES = {
 	"leftL": [
-			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel('red'), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1}
+			{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('red'), new Pixel(), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1}
 		],
 	"rightL": [
-			{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel(), new Pixel(), new Pixel('green')], [new Pixel('green'), new Pixel('green'), new Pixel('green')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
+			{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel(), new Pixel(), new Pixel('green')], [new Pixel('green'), new Pixel('green'), new Pixel('green'), new Pixel('green')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
 		],
-	"square": [
-			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+	"thumbLeft": [
+			{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+		],
+	"thumbRight": [
+			{piece:[[new Pixel('pink'), new Pixel()], [new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel(), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')], [new Pixel(), new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink'), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel()]], centerX: -1, centerY: 0},
 		],
 	"line": [
-			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -2, centerY: 0},
-			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')]], centerX: 0, centerY: -2}
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2}
 		],
-	"T": [
-			{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('purple'),new Pixel()], [new Pixel('purple') ,new Pixel('purple')], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
-			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
-			{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
+	"Plus": [
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
 		],
 	"leftZ": [
 			{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
@@ -383,6 +390,8 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 				}
 			}
 		}
+		document.getElementById(`img${board.HEIGHT - (playerPiece.y + 1)},${playerPiece.x}`).src = 'https://www.evan.umasscreate.net/pieces/leftL.png';
+		console.log("got here");
 
 	}
 }
