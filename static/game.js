@@ -109,6 +109,18 @@ const PIECES = {
 			{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
 		],
+	"boomerang": [
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')],[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel(),new Pixel()]], centerX: 0, centerY: 0},
+			{piece:[[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: 0, centerY: 0},
+			{piece:[[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: 0, centerY: 0},
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')]], centerX: 0, centerY: 0}
+		],
+	"tallT": [
+			{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('purple'),new Pixel(),new Pixel()], [new Pixel('purple') ,new Pixel('purple'),new Pixel('purple')], [new Pixel('purple'),new Pixel(),new Pixel()]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(),new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple'),new Pixel('purple')], [new Pixel(),new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
+		],	
 	"thumbLeft": [
 			{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
@@ -116,16 +128,28 @@ const PIECES = {
 			{piece:[[new Pixel('orange'), new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 		],
 	"thumbRight": [
-			{piece:[[new Pixel('pink'), new Pixel()], [new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel(), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink'), new Pixel()], [new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: -1},
+			{piece:[[new Pixel(), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel('pink')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink')], [new Pixel(), new Pixel('pink')]], centerX: -1, centerY: 0},
-			{piece:[[new Pixel('pink'), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('pink'), new Pixel('pink'), new Pixel('pink')], [new Pixel('pink'), new Pixel('pink'), new Pixel()]], centerX: -1, centerY: -1},
 		],
 	"line": [
 			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
 			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2}
+		],
+	"line3": [
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
+			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')]], centerX: 0, centerY: -1}
+		],
+	"v": [
+			{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange')]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel()]], centerX: -1, centerY: 0},
+			{piece:[[new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 		],
 	"Plus": [
 			{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
