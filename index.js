@@ -34,6 +34,10 @@ app.get('/OnePlayerGame', function(request, response){
 	response.sendFile(path.join(__dirname, 'OnePlayerGame.html'));
 });
 
+app.get('/Platformer', function(request, response){
+	response.sendFile(path.join(__dirname, 'platformerPlayLevel.html'));
+});
+
 // Starts the server.
 server.listen(0, function() {
   console.log('Starting server on port ' + server.address().port);
