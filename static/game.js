@@ -21,8 +21,8 @@ class Board{
 	constructor(stringRep=''){
 		//board[yCoord][xCoord]
 		this.board = [];
-		this.WIDTH = 10;
-		this.HEIGHT = 20;
+		this.WIDTH = 13;
+		this.HEIGHT = 24;
 		this.highestPiece = 0;
 		for(let i = 0; i < this.HEIGHT; i++){
       		this.board.push([]);
@@ -84,7 +84,8 @@ class Board{
 		return out;
 	}
 }
-
+let LEADERBOARD_QUALIFY = true;
+let PAUSED = false;
 const SPEED_DOWNWARDS = 250;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
@@ -114,29 +115,95 @@ const PIECES = {
 			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
 		],
+	//"v": [
+	//		{piece:[[new Pixel(), new Pixel('orange')], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel(), new Pixel('orange')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('orange'), new Pixel('orange')], [new Pixel('orange'), new Pixel()]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('orange'), new Pixel()], [new Pixel('orange'), new Pixel('orange')]], centerX: -1, centerY: 0},
+	//	],
 	"line": [
 			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -2, centerY: 0},
 			{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')]], centerX: 0, centerY: -2}
 		],
+	//"line3": [
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')]], centerX: 0, centerY: -1}
+	//	],
+	//"stairs": [
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel()],[new Pixel(), new Pixel('cyan'),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')]], centerX: -2, centerY: 0},
+	//		{piece:[[new Pixel(), new Pixel('cyan'),new Pixel('cyan')],[new Pixel('cyan'), new Pixel('cyan'),new Pixel()],[new Pixel('cyan'), new Pixel(),new Pixel()]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel('cyan'),new Pixel()],[new Pixel(), new Pixel('cyan'),new Pixel('cyan')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel(), new Pixel('cyan'),new Pixel('cyan')],[new Pixel('cyan'), new Pixel('cyan'),new Pixel()]], centerX: 0, centerY: -2}
+	//	],
+	//"boomerang": [
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')],[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel(),new Pixel()]], centerX: 0, centerY: 0},
+	//		{piece:[[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel(),new Pixel()],[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: 0, centerY: 0},
+	//		{piece:[[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')]], centerX: 0, centerY: 0},
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')],[new Pixel(), new Pixel(),new Pixel('cyan')]], centerX: 0, centerY: 0}
+	//	],
 	"T": [
 			{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
 			{piece:[[new Pixel('purple'),new Pixel()], [new Pixel('purple') ,new Pixel('purple')], [new Pixel('purple'),new Pixel()]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple')], [new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
 		],
+	//"tallT": [
+	//		{piece:[[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('purple'),new Pixel(),new Pixel()], [new Pixel('purple') ,new Pixel('purple'),new Pixel('purple')], [new Pixel('purple'),new Pixel(),new Pixel()]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel(), new Pixel('purple'),new Pixel()],[new Pixel('purple'),new Pixel('purple'),new Pixel('purple')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel(),new Pixel(),new Pixel('purple')], [new Pixel('purple') ,new Pixel('purple'),new Pixel('purple')], [new Pixel(),new Pixel(),new Pixel('purple')]], centerX: -1, centerY: -1},
+	//	],	
 	"leftZ": [
 			{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel()], [new Pixel(), new Pixel('blue'), new Pixel('blue')]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel()], [new Pixel(), new Pixel('blue'), new Pixel('blue')]], centerX: -1, centerY: -1}
 		],
+	//"rightL4": [
+	//		{piece:[[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()],[new Pixel('green'), new Pixel()], [new Pixel('green'), new Pixel('green')]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel(), new Pixel(), new Pixel(), new Pixel('green')], [new Pixel('green'), new Pixel('green'), new Pixel('green'), new Pixel('green')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel('green'), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')], [new Pixel(), new Pixel('green')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel('green'), new Pixel('green'), new Pixel('green'), new Pixel('green')], [new Pixel('green'), new Pixel(), new Pixel(), new Pixel()]], centerX: -1, centerY: 0}
+	//	],
+	//"Plus": [
+	//		{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel(),new Pixel('purple'),new Pixel()],[new Pixel('purple'), new Pixel('purple'),new Pixel('purple')],[new Pixel(),new Pixel('purple'),new Pixel()]], centerX: -1, centerY: -1},
+	//	],
+	//"line5": [
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
+	//		{piece:[[new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2},
+	//		{piece:[[new Pixel('cyan'), new Pixel('cyan'),new Pixel('cyan'),new Pixel('cyan'), new Pixel('cyan')]], centerX: -2, centerY: 0},
+	//		{piece:[[new Pixel('cyan')], [new Pixel('cyan')],[new Pixel('cyan')],[new Pixel('cyan')], [new Pixel('cyan')]], centerX: 0, centerY: -2}
+	//	],
+	//"leftL4": [
+	//		{piece:[[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')],[new Pixel(), new Pixel('red')], [new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel('red'), new Pixel('red'), new Pixel('red'), new Pixel('red')], [new Pixel(), new Pixel(), new Pixel(), new Pixel('red')]], centerX: -1, centerY: 0},
+	//		{piece:[[new Pixel('red'), new Pixel('red')], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()], [new Pixel('red'), new Pixel()]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('red'), new Pixel(), new Pixel(), new Pixel()], [new Pixel('red'), new Pixel('red'), new Pixel('red'), new Pixel('red')]], centerX: -1, centerY: -1}
+		//],
+	//"leftThumb": [
+	//		{piece:[[new Pixel(), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')]], centerX: 1, centerY: -1},
+	//		{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel('blue')], [new Pixel(), new Pixel('blue'), new Pixel('blue')]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel('blue')], [new Pixel('blue'), new Pixel()]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('blue'), new Pixel('blue'), new Pixel()], [new Pixel('blue'), new Pixel('blue'), new Pixel('blue')]], centerX: 0, centerY: -1}
+	//	],
 	"rightZ": [
 			{piece:[[new Pixel('teal'), new Pixel()], [new Pixel('teal'), new Pixel('teal')], [new Pixel(), new Pixel('teal')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel(), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel()]], centerX: -1, centerY: -1},
 			{piece:[[new Pixel('teal'), new Pixel()], [new Pixel('teal'), new Pixel('teal')], [new Pixel(), new Pixel('teal')]], centerX: 0, centerY: -1},
 			{piece:[[new Pixel(), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel()]], centerX: -1, centerY: -1}
+	//	],	
+	//"rightThumb": [
+	//		{piece:[[new Pixel('teal'), new Pixel()], [new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel(), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel('teal')]], centerX: -1, centerY: -1},
+	//		{piece:[[new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal')], [new Pixel(), new Pixel('teal')]], centerX: 0, centerY: -1},
+	//		{piece:[[new Pixel('teal'), new Pixel('teal'), new Pixel('teal')], [new Pixel('teal'), new Pixel('teal'), new Pixel()]], centerX: -1, centerY: -1}
 
 	]
 };
@@ -145,10 +212,10 @@ let score = 0;
 let canSwap = true;
 
 let playerPiece = {
-	piece: PIECES['rightZ'][0],
+	piece: PIECES['leftL'][0],
 	x: 4,
 	y: b.HEIGHT - 1,
-	pieceStr: "rightZ",
+	pieceStr: "leftL",
 	pieceIdx: 0
 };
 let queue = [];
@@ -826,6 +893,72 @@ function quickDrop(){
 	}
 }
 
+function pause(){
+	if(!PAUSED){
+		if(LEADERBOARD_QUALIFY){
+			LEADERBOARD_QUALIFY= false;
+		}
+			//once you have paused, you no longer qualify to be on the leaderboard
+		clearInterval(gameInterval);
+			//freezing time
+		document.onkeydown = pauseOnKeyDown;
+			//disabling all functions except unpause
+		updateVisuals(b, playerPiece);
+		const dimPause = document.createElement('div');
+		dimPause.id = "dimPause";
+		//needed^^ for deletion at unpause
+		dimPause.style.opacity = 0.4;
+		dimPause.style.position = "fixed";
+		dimPause.style.marginLeft = 'auto';
+		dimPause.style.marginRight = 'auto';
+		dimPause.style.top = "0px";
+		dimPause.style.backgroundColor = "black";
+		dimPause.style.width = "100%";
+		dimPause.style.height = "100%";
+		leftSection.appendChild(dimPause);
+
+		const pauseText = document.createElement("h1");
+		pauseText.id = "pauseText";
+		//needed^^ for deletion at unpause
+		pauseText.style.color = "white";
+		pauseText.style.position = "fixed";
+		pauseText.innerHTML = `<font style='color: Crimson'>PAUSE</font><br><font style='font-size: 50px;'>${score} points</font>`;
+		pauseText.style.margin = "auto";
+		pauseText.style.zIndex = "1000";
+		pauseText.style.width = "100%";
+		pauseText.style.textAlign = "center";
+		pauseText.style.fontSize = "150px";
+		pauseText.style.top = 100;
+		document.body.appendChild(pauseText);
+
+		const pauseInstruct = document.createElement("h1");
+		pauseInstruct.id = "pauseInstruct";
+		//needed^^ for deletion at unpause
+		pauseInstruct.style.color = "white";
+		pauseInstruct.style.position = "fixed";
+		pauseInstruct.innerHTML = `<font style='color: white'>Press 'p' to Continue</font>`;
+		pauseInstruct.style.margin = "auto";
+		pauseInstruct.style.zIndex = "1000";
+		pauseInstruct.style.width = "100%";
+		pauseInstruct.style.textAlign = "center";
+		pauseInstruct.style.fontSize = "15px";
+		pauseInstruct.style.top = 250;
+		document.body.appendChild(pauseInstruct);
+
+		PAUSED = true;
+	}else{
+		document.getElementById("dimPause").remove();
+		document.body.removeChild(document.getElementById("pauseText"));
+		document.body.removeChild(document.getElementById("pauseInstruct"));
+		document.onkeydown = enableOnKeyDown;
+		//enable buttons again
+		gameInterval = setInterval(gameIntervalFunction, SPEED_DOWNWARDS);
+		//continue time
+
+		PAUSED = false;
+	}
+}
+
 const enableOnKeyDown = function (e) {
 	//function mapping pressing of keys, disabled at game over
   e = e || window.event;
@@ -842,6 +975,8 @@ const enableOnKeyDown = function (e) {
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
+	} else if(e.key === 'p' || e.key === 'P'){
+		pause();
 	} else if(e.key === ' '){
 		if(canSwap){
 			hold();
@@ -851,6 +986,17 @@ const enableOnKeyDown = function (e) {
 	}
 	setTimeout(() => updateVisuals(b, playerPiece), 0);
 };
+
+const pauseOnKeyDown = function (e) {
+	//function mapping pressing of keys, disabled at game over
+  e = e || window.event;
+	// use e.keyCode
+	if(e.key === 'p' || e.key === 'P'){
+		pause();
+  } 
+	setTimeout(() => updateVisuals(b, playerPiece), 0);
+};
+
 
 document.onkeydown = enableOnKeyDown;
 
