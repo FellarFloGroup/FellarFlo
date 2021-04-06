@@ -907,7 +907,7 @@ function pause(){
 		const dimPause = document.createElement('div');
 		dimPause.id = "dimPause";
 		//needed^^ for deletion at unpause
-		dimPause.style.opacity = 0.4;
+		dimPause.style.opacity = 1.0;
 		dimPause.style.position = "fixed";
 		dimPause.style.marginLeft = 'auto';
 		dimPause.style.marginRight = 'auto';
