@@ -21,8 +21,8 @@ class Board{
 	constructor(stringRep=''){
 		//board[yCoord][xCoord]
 		this.board = [];
-		this.WIDTH = 13;
-		this.HEIGHT = 24;
+		this.WIDTH = 10;
+		this.HEIGHT = 20;
 		this.highestPiece = 0;
 		for(let i = 0; i < this.HEIGHT; i++){
       		this.board.push([]);
@@ -86,6 +86,7 @@ class Board{
 }
 let LEADERBOARD_QUALIFY = true;
 let PAUSED = false;
+let GHOST_VISIBLE = true;
 const SPEED_DOWNWARDS = 250;
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
@@ -309,6 +310,7 @@ middleSection.appendChild(scoreLabel);
 
 //Making tetris board
 const table = document.createElement("table");
+table.id = 'table';
 table.style.marginTop = '5%';
 table.style.marginLeft = 'auto';
 table.style.marginRight = 'auto';
@@ -429,7 +431,14 @@ function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayer
 							continue;
 						}
 						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).src = `https://www.evan.umasscreate.net/pixels/${playerPiece.piece.piece[i][j].color()}.png`;
-						document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 0.25;
+						
+						if(PAUSED){
+							document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = 0;
+							GHOST_VISIBLE = false;
+							//ensuring invisbility of ghost during pause menu
+						}else{
+							document.getElementById(`img${board.HEIGHT  - (yPos+1)},${xPos}`).style.opacity = .25;
+						}
 					}
 				}
 			}
@@ -895,19 +904,21 @@ function quickDrop(){
 
 function pause(){
 	if(!PAUSED){
+		PAUSED = true;
 		if(LEADERBOARD_QUALIFY){
 			LEADERBOARD_QUALIFY= false;
 		}
+		updateVisuals(b, playerPiece);
 			//once you have paused, you no longer qualify to be on the leaderboard
-		clearInterval(gameInterval);
-			//freezing time
+		clearInterval(gameInterval);	
+		//freezing time
 		document.onkeydown = pauseOnKeyDown;
 			//disabling all functions except unpause
-		updateVisuals(b, playerPiece);
+		//document.getElementById('table').style.display = 'none';
 		const dimPause = document.createElement('div');
 		dimPause.id = "dimPause";
 		//needed^^ for deletion at unpause
-		dimPause.style.opacity = 0.4;
+		dimPause.style.opacity = 1.0;
 		dimPause.style.position = "fixed";
 		dimPause.style.marginLeft = 'auto';
 		dimPause.style.marginRight = 'auto';
@@ -945,8 +956,15 @@ function pause(){
 		pauseInstruct.style.top = 250;
 		document.body.appendChild(pauseInstruct);
 
-		PAUSED = true;
+		
+		//for(let i = 0; i < b.HEIGHT; i++){
+  		//	for(let j = 0; j < b.WIDTH; j++){
+  		//		document.getElementById(`img${b.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
+  		//	}
+  		//}
+		
 	}else{
+		//document.getElementById('table').style.display = 'block';
 		document.getElementById("dimPause").remove();
 		document.body.removeChild(document.getElementById("pauseText"));
 		document.body.removeChild(document.getElementById("pauseInstruct"));
