@@ -21,8 +21,8 @@ class Board{
 	constructor(stringRep=''){
 		//board[yCoord][xCoord]
 		this.board = [];
-		this.WIDTH = 10;
-		this.HEIGHT = 20;
+		this.WIDTH = 15;
+		this.HEIGHT = 15;
 		this.highestPiece = 0;
 		for(let i = 0; i < this.HEIGHT; i++){
       		this.board.push([]);
@@ -211,6 +211,8 @@ const PIECES = {
 let b = new Board();
 let score = 0;
 let canSwap = true;
+let isFixed = false;
+let idx = -2;
 
 let playerPiece = {
 	piece: PIECES['leftL'][0],
@@ -219,10 +221,14 @@ let playerPiece = {
 	pieceStr: "leftL",
 	pieceIdx: 0
 };
+let displayTwo = [];
+displayTwo.push(getNewPieceStr());
+displayTwo.push(getNewPieceStr());
 let queue = [];
 playerQueue('add');
 setPlayerPiece(playerQueue('pop'));
 let holdPiece = '';
+let nextPiece = '';
 
 var socket = io();
 socket.on('connect', () => {
@@ -273,16 +279,18 @@ rightSection.appendChild(queueLabel);
 const queueBorder = document.createElement('div');
 queueBorder.style.border = '5px inset grey';
 queueBorder.style.width = '120px';
-queueBorder.style.height = '500px';
+queueBorder.style.height = '200px';
 queueBorder.left = '0';
 queueBorder.style.marginTop = '0px';
 rightSection.appendChild(queueBorder);
-const displayQueueArray = createQueueArray();
-updateQueueVisual();
+//const displayQueueArray = createQueueArray();
+const displayNext = createDisplayTwoArray();
+//updateQueueVisual();
+updateDisplayTwoVisual();
 
 //display for held piece
 const holdPieceLabel = document.createElement('h2');
-holdPieceLabel.innerHTML = "Hold";
+holdPieceLabel.innerHTML = "Next";
 holdPieceLabel.style.color = 'white';
 holdPieceLabel.align = 'right';
 holdPieceLabel.style.fontSize = 35;
@@ -290,14 +298,14 @@ holdPieceLabel.style.paddingRight = '40px';
 holdPieceLabel.style.paddingBottom = 0;
 holdPieceLabel.style.marginBottom = 0;
 leftSection.appendChild(holdPieceLabel);
-const holdPieceDisplay = document.createElement('img');
-holdPieceDisplay.style.width = '150px';
-holdPieceDisplay.style.border = '5px inset gray';
-holdPieceDisplay.style.height = '150px';
-holdPieceDisplay.style.position = 'relative';
-holdPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
-holdPieceDisplay.align = 'right';
-leftSection.appendChild(holdPieceDisplay);
+const nextPieceDisplay = document.createElement('img');
+nextPieceDisplay.style.width = '150px';
+nextPieceDisplay.style.border = '5px inset gray';
+nextPieceDisplay.style.height = '150px';
+nextPieceDisplay.style.position = 'relative';
+nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
+nextPieceDisplay.align = 'right';
+leftSection.appendChild(nextPieceDisplay);
 
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
@@ -358,6 +366,21 @@ function createQueueArray(){
 	return array;
 }
 
+function createDisplayTwoArray(){
+	let array = [];
+	for(let i = 0 ; i < 2 ; i++){
+		let newImage = document.createElement('img');
+		newImage.style.width = '100px';
+		newImage.style.height = '100px';
+		newImage.style.paddingLeft = '10px';
+		queueBorder.appendChild(newImage);
+		let lb = document.createElement('br');
+		queueBorder.appendChild(lb);
+		array.push(newImage);
+	}
+	return array;
+}
+
 function updateScoreVisual(score){
 	if(score === 1){
 		scoreLabel.innerHTML = `Score: 1 pt`;
@@ -372,13 +395,45 @@ function updateHoldPieceVisual(){
 	}
 }
 
+function updateNextPieceVisual(){
+	if(nextPiece.length != 0){
+		nextPieceDisplay.src = PIECES_IMG[nextPiece];
+	}else{
+		nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
+	}
+}
+
+function highlight(){
+    let defaultOutline = 'none';
+    console.log(isFixed);
+    if(!isFixed){
+		for(let i = 0 ; i < displayTwo.length; i++){
+			let queueElement = displayNext[i];
+			queueElement.src = PIECES_IMG[displayTwo[i]];
+			queueElement.style.outline = defaultOutline;
+			if(i === idx){
+	    		queueElement.style.outline = '#f00 solid 4px';
+			}
+		}
+	}
+	
+}
+
 function updateQueueVisual(){
 	for(let i = 0 ; i < queue.length; i++){
-		let queueElement = displayQueueArray[i];
-		queueElement.src = PIECES_IMG[queue[i]];
+		//let queueElement = displayQueueArray[i];
+		//queueElement.src = PIECES_IMG[queue[i]];
 
 	}
 
+}
+
+function updateDisplayTwoVisual(){
+	for(let i = 0 ; i < displayTwo.length; i++){
+		let queueElement = displayNext[i];
+		queueElement.src = PIECES_IMG[displayTwo[i]];
+		queueElement.outline = 'none';
+	}
 }
 //updateVisuals(board: Board): void
 function updateVisuals(board, playerPiece, showPlayerPiece=true, showGhostPlayerPiece=true){
@@ -578,6 +633,7 @@ function hold(){
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
 		setPlayerPiece(playerQueue('pop'));
 		updateQueueVisual();
+		updateDisplayTwoVisual();
 		holdPiece = newHoldPiece;
 	} else {
 		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
@@ -588,6 +644,21 @@ function hold(){
 
 function getNewPieceStr(){
 	return Object.keys(PIECES)[Math.floor(Math.random() * Object.keys(PIECES).length)];
+}
+
+function displayNextTwo(){
+	if(idx === -2){
+		if(Math.random() < 0.5){
+			idx = 0;
+		}else{
+			idx = 1;
+		}
+	}
+	console.log(displayTwo);
+	let out = displayTwo.splice(idx,1);
+	console.log(out);
+	displayTwo.push(getNewPieceStr());
+	return out;
 }
 
 function playerQueue(action){
@@ -635,8 +706,12 @@ function movePlayerDown(playerPiece){
 			}
 
 			canSwap = true;
-			setPlayerPiece(playerQueue('pop'));
-			updateQueueVisual();
+			setPlayerPiece(displayNextTwo());
+			isFixed = false;
+			idx = -2;
+			nextPiece = '';
+			updateNextPieceVisual();
+			updateDisplayTwoVisual();
 
 			score += 1;
 			let badPieceCounter = 0;
@@ -1001,8 +1076,18 @@ const enableOnKeyDown = function (e) {
 			updateHoldPieceVisual();
 			canSwap = false;
 		}
+	} else if(e.key === '1'){
+		if(!isFixed){idx = 0;}
+	} else if (e.key === '2'){
+		if(!isFixed){idx = 1;}
+	} else if((idx === 0 || idx === 1) & e.keyCode === 13){
+		console.log("here");
+		isFixed = true;
+		nextPiece = displayTwo[idx];
+		updateNextPieceVisual();
 	}
-	setTimeout(() => updateVisuals(b, playerPiece), 0);
+	highlight();
+	setTimeout(() => updateVisuals(b, playerPiece),0);
 };
 
 const pauseOnKeyDown = function (e) {
