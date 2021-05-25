@@ -289,23 +289,23 @@ const displayNext = createDisplayTwoArray();
 updateDisplayTwoVisual();
 
 //display for held piece
-const holdPieceLabel = document.createElement('h2');
-holdPieceLabel.innerHTML = "Next";
-holdPieceLabel.style.color = 'white';
-holdPieceLabel.align = 'right';
-holdPieceLabel.style.fontSize = 35;
-holdPieceLabel.style.paddingRight = '40px';
-holdPieceLabel.style.paddingBottom = 0;
-holdPieceLabel.style.marginBottom = 0;
-leftSection.appendChild(holdPieceLabel);
-const nextPieceDisplay = document.createElement('img');
-nextPieceDisplay.style.width = '150px';
-nextPieceDisplay.style.border = '5px inset gray';
-nextPieceDisplay.style.height = '150px';
-nextPieceDisplay.style.position = 'relative';
-nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
-nextPieceDisplay.align = 'right';
-leftSection.appendChild(nextPieceDisplay);
+// const holdPieceLabel = document.createElement('h2');
+// holdPieceLabel.innerHTML = "Next";
+// holdPieceLabel.style.color = 'white';
+// holdPieceLabel.align = 'right';
+// holdPieceLabel.style.fontSize = 35;
+// holdPieceLabel.style.paddingRight = '40px';
+// holdPieceLabel.style.paddingBottom = 0;
+// holdPieceLabel.style.marginBottom = 0;
+// leftSection.appendChild(holdPieceLabel);
+// const nextPieceDisplay = document.createElement('img');
+// nextPieceDisplay.style.width = '150px';
+// nextPieceDisplay.style.border = '5px inset gray';
+// nextPieceDisplay.style.height = '150px';
+// nextPieceDisplay.style.position = 'relative';
+// nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
+// nextPieceDisplay.align = 'right';
+// leftSection.appendChild(nextPieceDisplay);
 
 //Making tetris score label
 const scoreLabel = document.createElement('h1');
