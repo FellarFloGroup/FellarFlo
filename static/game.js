@@ -210,9 +210,8 @@ const PIECES = {
 };
 let b = new Board();
 let score = 0;
-let canSwap = true;
 let isFixed = false;
-let idx = -2;
+let nextPieceIdx = -2;
 
 let playerPiece = {
 	piece: PIECES['leftL'][0],
@@ -224,11 +223,6 @@ let playerPiece = {
 let displayTwo = [];
 displayTwo.push(getNewPieceStr());
 displayTwo.push(getNewPieceStr());
-let queue = [];
-playerQueue('add');
-setPlayerPiece(playerQueue('pop'));
-let holdPiece = '';
-let nextPiece = '';
 
 var socket = io();
 socket.on('connect', () => {
@@ -265,56 +259,48 @@ rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
 const queueLabel = document.createElement('h2');
-queueLabel.innerHTML = "Queue";
+queueLabel.innerHTML = "Choose Next Piece";
 queueLabel.style.color = 'white';
-queueLabel.align = 'left';
 queueLabel.style.fontSize = 35;
-queueLabel.style.paddingLeft = '15px';
-queueLabel.style.paddingBottom = 0;
+queueLabel.style.textAlign = "center";
+queueLabel.style.marginLeft = 'auto';
+queueLabel.style.marginRight = 'auto';
 queueLabel.style.marginBottom = 0;
 queueLabel.style.marginTop = '70px';
-rightSection.appendChild(queueLabel);
+middleSection.appendChild(queueLabel);
 
 
 const queueBorder = document.createElement('div');
 queueBorder.style.border = '5px inset grey';
-queueBorder.style.width = '120px';
-queueBorder.style.height = '200px';
-queueBorder.left = '0';
+queueBorder.style.width = '220px';
+queueBorder.style.marginLeft = 'auto';
+queueBorder.style.marginRight = 'auto';
+queueBorder.style.height = '100px';
 queueBorder.style.marginTop = '0px';
-rightSection.appendChild(queueBorder);
+middleSection.appendChild(queueBorder);
 //const displayQueueArray = createQueueArray();
 const displayNext = createDisplayTwoArray();
 //updateQueueVisual();
 updateDisplayTwoVisual();
 
-//display for held piece
-// const holdPieceLabel = document.createElement('h2');
-// holdPieceLabel.innerHTML = "Next";
-// holdPieceLabel.style.color = 'white';
-// holdPieceLabel.align = 'right';
-// holdPieceLabel.style.fontSize = 35;
-// holdPieceLabel.style.paddingRight = '40px';
-// holdPieceLabel.style.paddingBottom = 0;
-// holdPieceLabel.style.marginBottom = 0;
-// leftSection.appendChild(holdPieceLabel);
-// const nextPieceDisplay = document.createElement('img');
-// nextPieceDisplay.style.width = '150px';
-// nextPieceDisplay.style.border = '5px inset gray';
-// nextPieceDisplay.style.height = '150px';
-// nextPieceDisplay.style.position = 'relative';
-// nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
-// nextPieceDisplay.align = 'right';
-// leftSection.appendChild(nextPieceDisplay);
 
 //Making tetris score label
+const scoreLabelDiv = document.createElement("div");
+scoreLabelDiv.style.position = "fixed";
+scoreLabelDiv.style.backgroundColor = "gray";
+scoreLabelDiv.style.border = "5px inset lightgray";
+scoreLabelDiv.style.top = "0px";
+scoreLabelDiv.style.left = "0px";
+leftSection.appendChild(scoreLabelDiv);
 const scoreLabel = document.createElement('h1');
-scoreLabel.style.color = 'white';
-scoreLabel.style.marginLeft = 'auto';
-scoreLabel.style.marginRight = 'auto';
-scoreLabel.style.textAlign = 'center';
+scoreLabel.style.color = 'black';
+scoreLabel.style.textAlign = "left";
+scoreLabel.style.top = "0px";
+scoreLabel.style.marginTop = "0px";
+scoreLabel.style.marginBottom = "0px";
+scoreLabel.style.paddingRight = "20px";
 scoreLabel.innerHTML = 'Score: 0pts';
-middleSection.appendChild(scoreLabel);
+scoreLabelDiv.appendChild(scoreLabel);
 
 //Making tetris board
 const table = document.createElement("table");
@@ -350,22 +336,6 @@ for(let i = 0; i < b.HEIGHT; i++){
 middleSection.appendChild(table);
 
 
-
-function createQueueArray(){
-	let array = [];
-	for(let i = 0 ; i < 5 ; i++){
-		let newImage = document.createElement('img');
-		newImage.style.width = '100px';
-		newImage.style.height = '100px';
-		newImage.style.paddingLeft = '10px';
-		queueBorder.appendChild(newImage);
-		let lb = document.createElement('br');
-		queueBorder.appendChild(lb);
-		array.push(newImage);
-	}
-	return array;
-}
-
 function createDisplayTwoArray(){
 	let array = [];
 	for(let i = 0 ; i < 2 ; i++){
@@ -373,9 +343,8 @@ function createDisplayTwoArray(){
 		newImage.style.width = '100px';
 		newImage.style.height = '100px';
 		newImage.style.paddingLeft = '10px';
+		newImage.style.float = "left";
 		queueBorder.appendChild(newImage);
-		let lb = document.createElement('br');
-		queueBorder.appendChild(lb);
 		array.push(newImage);
 	}
 	return array;
@@ -389,19 +358,6 @@ function updateScoreVisual(score){
 	}
 }
 
-function updateHoldPieceVisual(){
-	if(holdPiece.length != 0){
-		holdPieceDisplay.src = PIECES_IMG[holdPiece];
-	}
-}
-
-function updateNextPieceVisual(){
-	if(nextPiece.length != 0){
-		nextPieceDisplay.src = PIECES_IMG[nextPiece];
-	}else{
-		nextPieceDisplay.src = 'https://evan.umasscreate.net/pieces/empty.png';
-	}
-}
 
 function highlight(){
     let defaultOutline = 'none';
@@ -411,21 +367,12 @@ function highlight(){
 			let queueElement = displayNext[i];
 			queueElement.src = PIECES_IMG[displayTwo[i]];
 			queueElement.style.outline = defaultOutline;
-			if(i === idx){
+			if(i === nextPieceIdx){
 	    		queueElement.style.outline = '#f00 solid 4px';
 			}
 		}
 	}
 	
-}
-
-function updateQueueVisual(){
-	for(let i = 0 ; i < queue.length; i++){
-		//let queueElement = displayQueueArray[i];
-		//queueElement.src = PIECES_IMG[queue[i]];
-
-	}
-
 }
 
 function updateDisplayTwoVisual(){
@@ -628,34 +575,21 @@ function setPlayerPiece(pieceStr){
 	playerPiece.pieceIdx = 0;
 }
 
-function hold(){
-	if(holdPiece.length === 0){
-		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
-		setPlayerPiece(playerQueue('pop'));
-		updateQueueVisual();
-		updateDisplayTwoVisual();
-		holdPiece = newHoldPiece;
-	} else {
-		const newHoldPiece = (' ' + playerPiece.pieceStr).slice(1);
-		setPlayerPiece(holdPiece);
-		holdPiece = newHoldPiece;
-	}
-}
 
 function getNewPieceStr(){
 	return Object.keys(PIECES)[Math.floor(Math.random() * Object.keys(PIECES).length)];
 }
 
 function displayNextTwo(){
-	if(idx === -2){
+	if(nextPieceIdx === -2){
 		if(Math.random() < 0.5){
-			idx = 0;
+			nextPieceIdx = 0;
 		}else{
-			idx = 1;
+			nextPieceIdx = 1;
 		}
 	}
 	console.log(displayTwo);
-	let out = displayTwo.splice(idx,1);
+	let out = displayTwo.splice(nextPieceIdx,1);
 	console.log(out);
 	displayTwo.push(getNewPieceStr());
 	return out;
@@ -705,13 +639,10 @@ function movePlayerDown(playerPiece){
 				}
 			}
 
-			canSwap = true;
 			setPlayerPiece(displayNextTwo());
 			isFixed = false;
-			idx = -2;
+			nextPieceIdx = -2;
 			nextPiece = '';
-			updateNextPieceVisual();
-			updateDisplayTwoVisual();
 
 			score += 1;
 			let badPieceCounter = 0;
@@ -781,6 +712,7 @@ function lose(){
 	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
+	scoreLabelDiv.style.display = 'none';
   	socket.emit('leaderboardScore', score);
 
 }
@@ -870,7 +802,6 @@ function playAgain(){
 	//restarting everything
 	b = new Board();
 	score = 0;
-	holdPiece = '';
 	queue = [];
 	playerQueue('add');
 	setPlayerPiece(playerQueue('pop'));
@@ -1070,21 +1001,14 @@ const enableOnKeyDown = function (e) {
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key === 'p' || e.key === 'P'){
 		pause();
-	} else if(e.key === ' '){
-		if(canSwap){
-			hold();
-			updateHoldPieceVisual();
-			canSwap = false;
-		}
 	} else if(e.key === '1'){
-		if(!isFixed){idx = 0;}
+		if(!isFixed){nextPieceIdx = 0;}
 	} else if (e.key === '2'){
-		if(!isFixed){idx = 1;}
-	} else if((idx === 0 || idx === 1) & e.keyCode === 13){
+		if(!isFixed){nextPieceIdx = 1;}
+	} else if((nextPieceIdx === 0 || nextPieceIdx === 1) & e.keyCode === 13){
 		console.log("here");
 		isFixed = true;
-		nextPiece = displayTwo[idx];
-		updateNextPieceVisual();
+		nextPiece = displayTwo[nextPieceIdx];
 	}
 	highlight();
 	setTimeout(() => updateVisuals(b, playerPiece),0);
