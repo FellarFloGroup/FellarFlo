@@ -88,6 +88,11 @@ let LEADERBOARD_QUALIFY = true;
 let PAUSED = false;
 let GHOST_VISIBLE = true;
 const SPEED_DOWNWARDS = 250;
+//TODO:
+//		MAKE GLOBAL VARIABLES:
+//			selectionTimer: setTimeout object (so we can stop the timer if necessary) (initialize as null or something similar)
+//			waitUntilNextSelected: boolean  (initialize as false)
+
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
 	"rightL": "https://evan.umasscreate.net/pieces/rightL.png",
@@ -642,7 +647,11 @@ function movePlayerDown(playerPiece){
 			setPlayerPiece(displayNextTwo());
 			isFixed = false;
 			nextPieceIdx = -2;
-			nextPiece = '';
+
+			//TODO: SET waitUntilNextSelected to FALSE
+			//		SET selectionTimer to a timer (5 seconds?) to set waitUntilNextSelected to TRUE  (setTimeout)
+			//		SET playerPiece to null (or some form of empty)
+			//We want to do this because we just placed a piece so we now need to wait for the next one
 
 			score += 1;
 			let badPieceCounter = 0;
@@ -820,6 +829,8 @@ function playAgain(){
 }
 
 const gameIntervalFunction = () => {
+
+	//TODO: if waitUntilSelected is true then return (nothing)
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
@@ -961,16 +972,8 @@ function pause(){
 		pauseInstruct.style.fontSize = "15px";
 		pauseInstruct.style.top = 250;
 		document.body.appendChild(pauseInstruct);
-
-		
-		//for(let i = 0; i < b.HEIGHT; i++){
-  		//	for(let j = 0; j < b.WIDTH; j++){
-  		//		document.getElementById(`img${b.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
-  		//	}
-  		//}
 		
 	}else{
-		//document.getElementById('table').style.display = 'block';
 		document.getElementById("dimPause").remove();
 		document.body.removeChild(document.getElementById("pauseText"));
 		document.body.removeChild(document.getElementById("pauseInstruct"));
@@ -1002,6 +1005,8 @@ const enableOnKeyDown = function (e) {
 	} else if(e.key === 'p' || e.key === 'P'){
 		pause();
 	} else if(e.key === '1'){
+		//TODO: stop selectionTimer as we have now selected; set waitUntilSelected to TRUE
+		//do the same for e.key === '2' condition
 		if(!isFixed){nextPieceIdx = 0;}
 	} else if (e.key === '2'){
 		if(!isFixed){nextPieceIdx = 1;}
