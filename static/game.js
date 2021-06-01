@@ -780,10 +780,9 @@ function playAgain(){
 	//restarting everything
 	b = new Board();
 	score = 0;
-	holdPiece = '';
-	queue = [];
-	playerQueue('add');
-	setPlayerPiece(playerQueue('pop'));
+	let displayTwo = [];
+	displayTwo.push(getNewPieceStr());
+	displayTwo.push(getNewPieceStr());
 	updateVisuals(b, playerPiece);
 	//time to delete the end game graphics
 	document.getElementById("dimDiv").remove();
