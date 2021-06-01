@@ -22,7 +22,7 @@ fs.readFile("leaderboard.ranking", function(error, contents) {
 	});
 });
 
-app.set('port', 0);
+app.set('port', 5000);
 app.use('/static', express.static(__dirname + '/static'));
 
 // Routing
@@ -35,7 +35,7 @@ app.get('/OnePlayerGame', function(request, response){
 });
 
 // Starts the server.
-server.listen(0, function() {
+server.listen(5000, function() {
   console.log('Starting server on port ' + server.address().port);
 });
 

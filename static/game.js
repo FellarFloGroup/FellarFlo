@@ -615,8 +615,7 @@ function movePlayerDown(playerPiece){
 			nextPieceIdx = -2;
 			updateDisplayTwoVisual();
 			waitUntilNextSelected = false;
-			console.log(waitUntilNextSelected);
-			selectionTimer =   setTimeout(function(){console.log('in timer');setPlayerPiece(displayNextTwo()); waitUntilNextSelected = true;}, 3000);
+			selectionTimer =   setTimeout(function(){console.log('in timer');setPlayerPiece(displayNextTwo());updateDisplayTwoVisual(); waitUntilNextSelected = true;}, 2000);
 			playerPiece = {};
 			score += 1;
 			console.log(playerPiece);
@@ -985,12 +984,12 @@ const enableOnKeyDown = function (e) {
 	} else if(e.key === 'p' || e.key === 'P'){
 		pause();
 	} else if(e.key === '1'){
-		selectionTimer = null;
-		waitUntilNextSelected = true;
+		//selectionTimer = null;
+		//waitUntilNextSelected = true;
 		nextPieceIdx = 0;
 	} else if (e.key === '2'){
-		selectionTimer = null;
-		waitUntilNextSelected = true;
+		//selectionTimer = null;
+		//waitUntilNextSelected = true;
 		nextPieceIdx = 1;
 	} 
 	highlight();
