@@ -962,13 +962,13 @@ const enableOnKeyDown = function (e) {
 	//function mapping pressing of keys, disabled at game over
   	e = e || window.event;
 	// use e.keyCode
-  	if (e.key === 'ArrowDown') {
+  	if (e.key === 'ArrowDown' && waitUntilNextSelected) {
 		move("down");
-  	} else if (e.key === 'ArrowLeft') {
+  	} else if (e.key === 'ArrowLeft' && waitUntilNextSelected) {
 		move("left");
-  	} else if (e.key === 'ArrowRight') {
+  	} else if (e.key === 'ArrowRight' && waitUntilNextSelected) {
 		move("right");
-  	} else if(e.key === 'ArrowUp'){
+  	} else if(e.key === 'ArrowUp' && waitUntilNextSelected){
 		quickDrop();
 	} else if(waitUntilNextSelected && e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
