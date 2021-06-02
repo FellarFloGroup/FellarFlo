@@ -781,6 +781,7 @@ function playAgain(){
 	//restarting everything
 	b = new Board();
 	score = 0;
+	setPlayerPiece('leftL');
 	let displayTwo = [];
 	displayTwo.push(getNewPieceStr());
 	displayTwo.push(getNewPieceStr());
