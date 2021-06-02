@@ -649,35 +649,6 @@ function movePlayerDown(playerPiece){
 			}, 2000);
 			playerPiece = {};
 			score += 1;
-			/*if(true){
-				let badPieceCounter = 0;
-				for(let i = 0; i < playerPiece.piece.piece.length; i++){
-					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-						if(!playerPiece.piece.piece[i][j].isEmpty()){
-							if (playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
-								if(!b.board[b.HEIGHT - 1][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-									badPieceCounter += 1;
-								}
-							}
-							if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-								//console.log(playerPiece.y-i-playerPiece.piece.centerY);
-								badPieceCounter += 1;
-							}
-						}
-					}
-				}
-				if(badPieceCounter >= 1){
-					for(let i = 0; i < playerPiece.piece.piece.length; i++){
-						for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-							while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-								playerPiece.y += 1;
-							}
-						}
-					}
-					return true;
-				}*/
-			//playerPiece = {}
-			//}
 		} else {
 			framesUntilPlace--;
 		}
