@@ -582,6 +582,7 @@ function displayNextTwo(){
 			nextPieceIdx = 1;
 		}
 	}
+	highlight();
 	let out = displayTwo.splice(nextPieceIdx,1);
 	displayTwo.push(getNewPieceStr());
 	return out;
@@ -973,17 +974,17 @@ function pause(){
 
 const enableOnKeyDown = function (e) {
 	//function mapping pressing of keys, disabled at game over
-  e = e || window.event;
+  	e = e || window.event;
 	// use e.keyCode
-  if (e.key === 'ArrowDown') {
+  	if (e.key === 'ArrowDown') {
 		move("down");
-  } else if (e.key === 'ArrowLeft') {
+  	} else if (e.key === 'ArrowLeft') {
 		move("left");
-  } else if (e.key === 'ArrowRight') {
+  	} else if (e.key === 'ArrowRight') {
 		move("right");
-  } else if(e.key === 'ArrowUp'){
+  	} else if(e.key === 'ArrowUp'){
 		quickDrop();
-	} else if(e.key === 'a' || e.key === 'A'){
+	} else if(waitUntilNextSelected && e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
 	} else if(e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
@@ -993,12 +994,13 @@ const enableOnKeyDown = function (e) {
 		//selectionTimer = null;
 		//waitUntilNextSelected = true;
 		nextPieceIdx = 0;
+		highlight();
 	} else if (e.key === '2'){
 		//selectionTimer = null;
 		//waitUntilNextSelected = true;
 		nextPieceIdx = 1;
+		highlight();
 	} 
-	highlight();
 	setTimeout(() => updateVisuals(b, playerPiece),0);
 };
 
