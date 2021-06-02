@@ -357,7 +357,7 @@ function updateScoreVisual(score){
 	}
 }
 
-function highlight(){
+function highlightNextPiece(){
     let defaultOutline = 'none';
 	for(let i = 0 ; i < displayTwo.length; i++){
 		let queueElement = displayNext[i];
@@ -582,7 +582,7 @@ function displayNextTwo(){
 			nextPieceIdx = 1;
 		}
 	}
-	highlight();
+	highlightNextPiece();
 	let out = displayTwo.splice(nextPieceIdx,1);
 	displayTwo.push(getNewPieceStr());
 	return out;
@@ -621,13 +621,14 @@ function movePlayerDown(playerPiece){
 				}
 			}
 			console.log("placed down");
-			nextPieceIdx = -2;
 			updateDisplayTwoVisual();
 			waitUntilNextSelected = false;
 			selectionTimer = setTimeout(function(){
 				console.log('in timer');
 				setPlayerPiece(displayNextTwo());
 				updateDisplayTwoVisual(); 
+				nextPieceIdx = -2;
+				highlightNextPiece();
 				waitUntilNextSelected = true;
 			}, 2000);
 			playerPiece = {};
@@ -986,20 +987,20 @@ const enableOnKeyDown = function (e) {
 		quickDrop();
 	} else if(waitUntilNextSelected && e.key === 'a' || e.key === 'A'){
 		rotatePlayerPiece(playerPiece, 'left');
-	} else if(e.key === 'd' || e.key === 'D'){
+	} else if(waitUntilNextSelected && e.key === 'd' || e.key === 'D'){
 		rotatePlayerPiece(playerPiece, 'right');
 	} else if(e.key === 'p' || e.key === 'P'){
 		pause();
-	} else if(e.key === '1'){
+	} else if(!waitUntilNextSelected && e.key === '1'){
 		//selectionTimer = null;
 		//waitUntilNextSelected = true;
 		nextPieceIdx = 0;
-		highlight();
-	} else if (e.key === '2'){
+		highlightNextPiece();
+	} else if (!waitUntilNextSelected && e.key === '2'){
 		//selectionTimer = null;
 		//waitUntilNextSelected = true;
 		nextPieceIdx = 1;
-		highlight();
+		highlightNextPiece();
 	} 
 	setTimeout(() => updateVisuals(b, playerPiece),0);
 };
