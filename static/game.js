@@ -88,10 +88,8 @@ let LEADERBOARD_QUALIFY = true;
 let PAUSED = false;
 let GHOST_VISIBLE = true;
 const SPEED_DOWNWARDS = 250;
-//TODO:
-//		MAKE GLOBAL VARIABLES:
-//			selectionTimer: setTimeout object (so we can stop the timer if necessary) (initialize as null or something similar)
-//			waitUntilNextSelected: boolean  (initialize as false)
+let selectionTimer = null;
+let waitUntilNextSelected = true;
 
 const PIECES_IMG = {
 	"leftL": "https://evan.umasscreate.net/pieces/leftL.png",
@@ -215,7 +213,6 @@ const PIECES = {
 };
 let b = new Board();
 let score = 0;
-let isFixed = false;
 let nextPieceIdx = -2;
 
 let playerPiece = {
@@ -283,11 +280,8 @@ queueBorder.style.marginRight = 'auto';
 queueBorder.style.height = '100px';
 queueBorder.style.marginTop = '0px';
 middleSection.appendChild(queueBorder);
-//const displayQueueArray = createQueueArray();
 const displayNext = createDisplayTwoArray();
-//updateQueueVisual();
 updateDisplayTwoVisual();
-
 
 //Making tetris score label
 const scoreLabelDiv = document.createElement("div");
@@ -363,21 +357,16 @@ function updateScoreVisual(score){
 	}
 }
 
-
 function highlight(){
     let defaultOutline = 'none';
-    console.log(isFixed);
-    if(!isFixed){
-		for(let i = 0 ; i < displayTwo.length; i++){
-			let queueElement = displayNext[i];
-			queueElement.src = PIECES_IMG[displayTwo[i]];
-			queueElement.style.outline = defaultOutline;
-			if(i === nextPieceIdx){
-	    		queueElement.style.outline = '#f00 solid 4px';
-			}
+	for(let i = 0 ; i < displayTwo.length; i++){
+		let queueElement = displayNext[i];
+		queueElement.src = PIECES_IMG[displayTwo[i]];
+		queueElement.style.outline = defaultOutline;
+		if(i === nextPieceIdx){
+	    	queueElement.style.outline = '#f00 solid 4px';
 		}
-	}
-	
+	}	
 }
 
 function updateDisplayTwoVisual(){
@@ -593,24 +582,11 @@ function displayNextTwo(){
 			nextPieceIdx = 1;
 		}
 	}
-	console.log(displayTwo);
 	let out = displayTwo.splice(nextPieceIdx,1);
-	console.log(out);
 	displayTwo.push(getNewPieceStr());
 	return out;
 }
 
-function playerQueue(action){
-	if(action == 'add'){
-		for(let i = queue.length; i < 5; i++){
-			queue.push(getNewPieceStr());
-		}
-	} else if(action == 'pop'){
-		let out = queue.shift();
-		playerQueue('add');
-		return out;
-	}
-}
 
 let framesUntilPlace = 1;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
@@ -643,41 +619,43 @@ function movePlayerDown(playerPiece){
 					}
 				}
 			}
-
-			setPlayerPiece(displayNextTwo());
-			isFixed = false;
+			console.log("placed down");
 			nextPieceIdx = -2;
-
-			//TODO: SET waitUntilNextSelected to FALSE
-			//		SET selectionTimer to a timer (5 seconds?) to set waitUntilNextSelected to TRUE  (setTimeout)
-			//		SET playerPiece to null (or some form of empty)
-			//We want to do this because we just placed a piece so we now need to wait for the next one
-
+			updateDisplayTwoVisual();
+			waitUntilNextSelected = false;
+			selectionTimer =   setTimeout(function(){console.log('in timer');setPlayerPiece(displayNextTwo());updateDisplayTwoVisual(); waitUntilNextSelected = true;}, 2000);
+			playerPiece = {};
 			score += 1;
-			let badPieceCounter = 0;
-			for(let i = 0; i < playerPiece.piece.piece.length; i++){
-				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-					if(!playerPiece.piece.piece[i][j].isEmpty()){
-						if (playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
-							if(!b.board[b.HEIGHT - 1][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+			console.log(playerPiece);
+			if(waitUntilNextSelected){
+				console.log("player piece is :");
+				console.log(playerPiece.pieceStr);
+				let badPieceCounter = 0;
+				for(let i = 0; i < playerPiece.piece.piece.length; i++){
+					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+						if(!playerPiece.piece.piece[i][j].isEmpty()){
+							if (playerPiece.y-i-playerPiece.piece.centerY >= b.HEIGHT){
+								if(!b.board[b.HEIGHT - 1][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+									badPieceCounter += 1;
+								}
+							}
+							if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+								//console.log(playerPiece.y-i-playerPiece.piece.centerY);
 								badPieceCounter += 1;
 							}
 						}
-						if(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-							badPieceCounter += 1;
-						}
 					}
 				}
-			}
-			if(badPieceCounter >= 1){
-				for(let i = 0; i < playerPiece.piece.piece.length; i++){
-					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
-						while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
-							playerPiece.y += 1;
+				if(badPieceCounter >= 1){
+					for(let i = 0; i < playerPiece.piece.piece.length; i++){
+						for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
+							while(playerPiece.y-i-playerPiece.piece.centerY < b.HEIGHT && !b.board[playerPiece.y-i-playerPiece.piece.centerY][playerPiece.x-j-playerPiece.piece.centerX].isEmpty()){
+								playerPiece.y += 1;
+							}
 						}
 					}
+					return true;
 				}
-				return true;
 			}
 		} else {
 			framesUntilPlace--;
@@ -811,9 +789,9 @@ function playAgain(){
 	//restarting everything
 	b = new Board();
 	score = 0;
-	queue = [];
-	playerQueue('add');
-	setPlayerPiece(playerQueue('pop'));
+	let displayTwo = [];
+	displayTwo.push(getNewPieceStr());
+	displayTwo.push(getNewPieceStr());
 	updateVisuals(b, playerPiece);
 	//time to delete the end game graphics
 	document.getElementById("dimDiv").remove();
@@ -829,8 +807,9 @@ function playAgain(){
 }
 
 const gameIntervalFunction = () => {
-
-	//TODO: if waitUntilSelected is true then return (nothing)
+	if(!waitUntilNextSelected){
+		return
+	}
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
@@ -1005,16 +984,14 @@ const enableOnKeyDown = function (e) {
 	} else if(e.key === 'p' || e.key === 'P'){
 		pause();
 	} else if(e.key === '1'){
-		//TODO: stop selectionTimer as we have now selected; set waitUntilSelected to TRUE
-		//do the same for e.key === '2' condition
-		if(!isFixed){nextPieceIdx = 0;}
+		//selectionTimer = null;
+		//waitUntilNextSelected = true;
+		nextPieceIdx = 0;
 	} else if (e.key === '2'){
-		if(!isFixed){nextPieceIdx = 1;}
-	} else if((nextPieceIdx === 0 || nextPieceIdx === 1) & e.keyCode === 13){
-		console.log("here");
-		isFixed = true;
-		nextPiece = displayTwo[nextPieceIdx];
-	}
+		//selectionTimer = null;
+		//waitUntilNextSelected = true;
+		nextPieceIdx = 1;
+	} 
 	highlight();
 	setTimeout(() => updateVisuals(b, playerPiece),0);
 };
