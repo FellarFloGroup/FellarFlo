@@ -608,7 +608,7 @@ function movePlayerDown(playerPiece){
 
 	//place piece down
 	if(change !== 1){
-		if(framesUntilPlace === 0){
+		if(true || framesUntilPlace === 0){
 			for(let i = 0; i < playerPiece.piece.piece.length; i++){
 				for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
 					if(!playerPiece.piece.piece[i][j].isEmpty()){
@@ -623,11 +623,16 @@ function movePlayerDown(playerPiece){
 			nextPieceIdx = -2;
 			updateDisplayTwoVisual();
 			waitUntilNextSelected = false;
-			selectionTimer =   setTimeout(function(){console.log('in timer');setPlayerPiece(displayNextTwo());updateDisplayTwoVisual(); waitUntilNextSelected = true;}, 2000);
+			selectionTimer = setTimeout(function(){
+				console.log('in timer');
+				setPlayerPiece(displayNextTwo());
+				updateDisplayTwoVisual(); 
+				waitUntilNextSelected = true;
+			}, 2000);
 			playerPiece = {};
 			score += 1;
 			console.log(playerPiece);
-			if(waitUntilNextSelected){
+			if(true){
 				console.log("player piece is :");
 				console.log(playerPiece.pieceStr);
 				let badPieceCounter = 0;
@@ -810,6 +815,7 @@ const gameIntervalFunction = () => {
 	if(!waitUntilNextSelected){
 		return
 	}
+	console.log("hi");
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
