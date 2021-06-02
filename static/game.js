@@ -591,6 +591,21 @@ function displayNextTwo(){
 
 let framesUntilPlace = 1;
 //movePlayerDown will return true iff the player has lost (a player placed a piece that is above the limit)
+function checkIfNewPieceCanSpawn(playerPiece){
+	for(let i = 0 ; i < playerPiece.piece.piece[playerPiece.piece.piece.length - 1].length; i++){
+		if(!playerPiece.piece.piece[playerPiece.piece.piece.length - 1][i].isEmpty()){
+			if(!b.board[b.HEIGHT - 1][playerPiece.x-i-playerPiece.piece.centerX].isEmpty()){
+				return false;
+
+			}
+		}
+	}
+	return true	
+}
+	
+
+
+
 function movePlayerDown(playerPiece){
 	let change = 1;
 	for(let i = 0; i < playerPiece.piece.piece.length; i++){
@@ -620,11 +635,12 @@ function movePlayerDown(playerPiece){
 					}
 				}
 			}
-			console.log("placed down");
+			if (!checkIfNewPieceCanSpawn(playerPiece)){
+				lose();
+			}
 			updateDisplayTwoVisual();
 			waitUntilNextSelected = false;
 			selectionTimer = setTimeout(function(){
-				console.log('in timer');
 				setPlayerPiece(displayNextTwo());
 				updateDisplayTwoVisual(); 
 				nextPieceIdx = -2;
@@ -633,10 +649,7 @@ function movePlayerDown(playerPiece){
 			}, 2000);
 			playerPiece = {};
 			score += 1;
-			console.log(playerPiece);
-			if(true){
-				console.log("player piece is :");
-				console.log(playerPiece.pieceStr);
+			/*if(true){
 				let badPieceCounter = 0;
 				for(let i = 0; i < playerPiece.piece.piece.length; i++){
 					for(let j = 0; j < playerPiece.piece.piece[i].length; j++){
@@ -662,8 +675,9 @@ function movePlayerDown(playerPiece){
 						}
 					}
 					return true;
-				}
-			}
+				}*/
+			//playerPiece = {}
+			//}
 		} else {
 			framesUntilPlace--;
 		}
@@ -817,7 +831,6 @@ const gameIntervalFunction = () => {
 	if(!waitUntilNextSelected){
 		return
 	}
-	console.log("hi");
 	if(movePlayerDown(playerPiece)){
 		lose();
 	}
