@@ -261,35 +261,45 @@ rightSection.style.height = '100%';
 sectionsRow.appendChild(rightSection);
 
 const queueLabel = document.createElement('h2');
-queueLabel.innerHTML = "Queue";
+queueLabel.innerHTML = "Choose Next Piece";
 queueLabel.style.color = 'white';
-queueLabel.align = 'left';
 queueLabel.style.fontSize = 35;
-queueLabel.style.paddingLeft = '15px';
-queueLabel.style.paddingBottom = 0;
+queueLabel.style.textAlign = "center";
+queueLabel.style.marginLeft = 'auto';
+queueLabel.style.marginRight = 'auto';
 queueLabel.style.marginBottom = 0;
 queueLabel.style.marginTop = '70px';
-rightSection.appendChild(queueLabel);
+middleSection.appendChild(queueLabel);
 
 
 const queueBorder = document.createElement('div');
 queueBorder.style.border = '5px inset grey';
-queueBorder.style.width = '120px';
-queueBorder.style.height = '200px';
-queueBorder.left = '0';
+queueBorder.style.width = '220px';
+queueBorder.style.marginLeft = 'auto';
+queueBorder.style.marginRight = 'auto';
+queueBorder.style.height = '100px';
 queueBorder.style.marginTop = '0px';
-rightSection.appendChild(queueBorder);
+middleSection.appendChild(queueBorder);
 const displayNext = createDisplayTwoArray();
 updateDisplayTwoVisual();
 
 //Making tetris score label
+const scoreLabelDiv = document.createElement("div");
+scoreLabelDiv.style.position = "fixed";
+scoreLabelDiv.style.backgroundColor = "gray";
+scoreLabelDiv.style.border = "5px inset lightgray";
+scoreLabelDiv.style.top = "0px";
+scoreLabelDiv.style.left = "0px";
+leftSection.appendChild(scoreLabelDiv);
 const scoreLabel = document.createElement('h1');
-scoreLabel.style.color = 'white';
-scoreLabel.style.marginLeft = 'auto';
-scoreLabel.style.marginRight = 'auto';
-scoreLabel.style.textAlign = 'center';
+scoreLabel.style.color = 'black';
+scoreLabel.style.textAlign = "left";
+scoreLabel.style.top = "0px";
+scoreLabel.style.marginTop = "0px";
+scoreLabel.style.marginBottom = "0px";
+scoreLabel.style.paddingRight = "20px";
 scoreLabel.innerHTML = 'Score: 0pts';
-middleSection.appendChild(scoreLabel);
+scoreLabelDiv.appendChild(scoreLabel);
 
 //Making tetris board
 const table = document.createElement("table");
@@ -325,7 +335,6 @@ for(let i = 0; i < b.HEIGHT; i++){
 middleSection.appendChild(table);
 
 
-
 function createDisplayTwoArray(){
 	let array = [];
 	for(let i = 0 ; i < 2 ; i++){
@@ -333,9 +342,8 @@ function createDisplayTwoArray(){
 		newImage.style.width = '100px';
 		newImage.style.height = '100px';
 		newImage.style.paddingLeft = '10px';
+		newImage.style.float = "left";
 		queueBorder.appendChild(newImage);
-		let lb = document.createElement('br');
-		queueBorder.appendChild(lb);
 		array.push(newImage);
 	}
 	return array;
@@ -691,6 +699,7 @@ function lose(){
 	loseText.style.top = 100;
 	document.body.appendChild(loseText);
 	scoreLabel.style.display = 'none';
+	scoreLabelDiv.style.display = 'none';
   	socket.emit('leaderboardScore', score);
 
 }
@@ -942,16 +951,8 @@ function pause(){
 		pauseInstruct.style.fontSize = "15px";
 		pauseInstruct.style.top = 250;
 		document.body.appendChild(pauseInstruct);
-
-		
-		//for(let i = 0; i < b.HEIGHT; i++){
-  		//	for(let j = 0; j < b.WIDTH; j++){
-  		//		document.getElementById(`img${b.HEIGHT - (i + 1)},${j}`).style.opacity = 1;
-  		//	}
-  		//}
 		
 	}else{
-		//document.getElementById('table').style.display = 'block';
 		document.getElementById("dimPause").remove();
 		document.body.removeChild(document.getElementById("pauseText"));
 		document.body.removeChild(document.getElementById("pauseInstruct"));
