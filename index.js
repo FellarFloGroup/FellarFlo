@@ -11,6 +11,8 @@ let server = http.Server(app);
 let io = socketIO(server);
 
 let leaderboard = [];
+const roomsPublic = {};
+const roomsPrivate = {};
 
 fs.readFile("leaderboard.ranking", function(error, contents) {
 	leaderboard = contents.toString().split('\n').map(e => {
@@ -39,9 +41,49 @@ server.listen(5000, function() {
   console.log('Starting server on port ' + server.address().port);
 });
 
+// join room will connect to a speified room
+const joinRoom = (socket,room) =>{
+	room.sockets.push(socket);
+	socket.join(room.id,() =>{
+		socket.roomId = room.id;
+    	console.log(socket.id, "Joined", room.id);
+	});
+}
+
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
 	const clientId = socket.id;
+	socket.on(socket.on('createRoom', (roomName, callback) =>{
+		const room ={
+			// creates unique id
+			id : uuid(),
+			name:roomName,
+			sockets : [],
+			//private room(for friends) or public room
+			type:"public",
+			// mode specifies if they want to play against AI or not.
+			// Only for private rooms 
+			//True : against AI
+			//False: AI
+			mode:false
+			// applicable only when playing against an AI
+			level:"easy"
+		}
+		if(room.type === "public"){
+			roomsPublic[room.id] = room;
+		}else{
+			if(room.mode){
+				//start a game with AI
+			}else{
+				roomsPrivate[room.id] = room;
+			}
+		}
+    // have the socket join the room they've just created.
+    	joinRoom(socket, room);
+    	callback();
+
+
+	});
 	socket.on('leaderboardScore', function(score) {
 		let idx = -1;
 		for(let i = 0; i < leaderboard.length; i++){
