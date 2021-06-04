@@ -50,6 +50,8 @@ const joinRoom = (socket,room) =>{
 	});
 }
 
+
+
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
 	const clientId = socket.id;
@@ -84,6 +86,27 @@ io.on('connection', function(socket) {
 
 
 	});
+	// To display all the Public rooms that are avalible
+	socket.on('getRoomNames', (data, callback) => {
+    const roomNames = [];
+    for (const id in roomsPublic) {
+      const {name} = rooms[id];
+      const room = {name, id};
+      roomNames.push(room);
+    }
+
+    callback(roomNames);
+  });
+
+
+	//We can use this to join both public and private rooms
+	socket.on('joinRoom',(roomId,callback)=>{
+		const room = rooms[roomId];
+    	joinRoom(socket, room);
+    	callback();
+	});
+
+
 	socket.on('leaderboardScore', function(score) {
 		let idx = -1;
 		for(let i = 0; i < leaderboard.length; i++){
